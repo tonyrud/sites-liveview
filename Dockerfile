@@ -17,7 +17,8 @@ RUN ["chmod", "700", "./entrypoint.sh"]
 RUN mix do local.hex --force, \
   local.rebar --force, \
   deps.get, \
-  compile
+  compile, \
+  phx.digest
 
 RUN npm install --prefix assets
 

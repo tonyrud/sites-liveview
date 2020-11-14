@@ -1,0 +1,6 @@
+<section>
+  <h1>Sites</h1>
+  <%= for s <- @sites do %>
+        <div><%= s.name %> - <%= s.count %></div>
+      <% end %>
+</section>

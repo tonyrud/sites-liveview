@@ -22,5 +22,4 @@ else
   echo "Database $POSTGRES_DB has already been created"
 fi
 
-# CMD ["elixir", "--sname", "demo", "-S", "mix", "phx.server"]
-exec mix phx.server
+elixir --sname demo --cookie abc -S mix phx.server
