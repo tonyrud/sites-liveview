@@ -11,7 +11,13 @@ defmodule DemoWeb.SitesLive do
     #   }
     # end)
 
-    {:ok, assign(socket, sites: Demo.Sites.all())}
+    Demo.Sites.all() |> IO.inspect()
+
+    {:ok, assign(
+      socket,
+      sites: Demo.Sites.all(),
+      page_title: "Sites"
+      )}
   end
 
 end

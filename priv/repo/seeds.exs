@@ -1,8 +1,8 @@
 
 alias Demo.{
-  Controller,
+  Controllers.Controller,
   Repo,
-  Site
+  Sites.Site
 }
 
 Ecto.Migrator.with_repo(Repo, fn _repo ->

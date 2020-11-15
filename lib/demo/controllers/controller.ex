@@ -1,4 +1,4 @@
-defmodule Demo.Controller do
+defmodule Demo.Controllers.Controller do
   use Ecto.Schema
 
   schema "controllers" do
@@ -7,6 +7,6 @@ defmodule Demo.Controller do
     field :mode, :string
     field :type, :string
 
-    belongs_to :site, Demo.Site
+    belongs_to :site, Demo.Sites.Site
   end
 end

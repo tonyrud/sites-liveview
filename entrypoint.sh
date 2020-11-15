@@ -2,6 +2,11 @@
 # Docker entrypoint script.
 # Runs in phoenix container
 
+mix deps.get
+mix do compile
+
+npm install --prefix assets
+
 # Wait until Postgres is ready
 while ! pg_isready -q -h $POSTGRES_HOST -p $POSTGRES_PORT -U $POSTGRES_USER
 do
@@ -19,7 +24,9 @@ then
   
   mix ecto.setup
 else
-  echo "Database $POSTGRES_DB has already been created"
+  echo "Database $POSTGRES_DB has already been created. Running migrations..."
+
+  mix ecto.migrate
 fi
 
 elixir --sname demo --cookie abc -S mix phx.server

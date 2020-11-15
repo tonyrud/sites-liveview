@@ -15,11 +15,6 @@ WORKDIR /app
 RUN ["chmod", "700", "./entrypoint.sh"]
 
 RUN mix do local.hex --force, \
-  local.rebar --force, \
-  deps.get, \
-  compile, \
-  phx.digest
-
-RUN npm install --prefix assets
+  local.rebar --force
 
 ENTRYPOINT ["sh", "./entrypoint.sh"]
