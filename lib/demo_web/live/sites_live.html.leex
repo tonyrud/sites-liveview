@@ -5,12 +5,14 @@
   <table class="table-auto">
   <thead>
     <tr>
-      <th class="px-4 py-2">Site ID</th>
-      <th class="px-4 py-2">Name</th>
-      <th class="px-4 py-2">Address</th>
-      <th class="px-4 py-2">Billing Status</th>
-      <th class="px-4 py-2">Has Weather Station</th>
-      <th class="px-4 py-2">Total Controllers</th>
+      <th class="px-4 py-2">
+        <%= sort_link(@socket, "Site Id", :id, @options) %>
+      </th>
+      <th class="px-4 py-2"><%= sort_link(@socket, "Name", :name, @options) %></th>
+      <th class="px-4 py-2"><%= sort_link(@socket, "Address", :address, @options) %></th>
+      <th class="px-4 py-2"><%= sort_link(@socket, "Billing Status", :billing_status, @options) %></th>
+      <th class="px-4 py-2"><%= sort_link(@socket, "Has Weather Station", :has_weather_station, @options) %></th>
+      <th class="px-4 py-2"><%= sort_link(@socket, "Controller Count", :controllers, @options) %></th>
     </tr>
   </thead>
   <tbody
@@ -18,12 +20,12 @@
   <%= for site <- @sites do %>
 
     <tr>
-      <td class="border px-4 py-2"><%= site.id %></td>
-      <td class="border px-4 py-2"><%= site.name %></td>
-      <td class="border px-4 py-2"><%= site.address %></td>
-      <td class="border px-4 py-2"><%= site.billing_status %></td>
-      <td class="border px-4 py-2"><%= site.has_weather_station %></td>
-      <td class="border px-4 py-2"><%= length(site.controllers) %></td>
+      <td class="border px-5 py-4"><%= site.id %></td>
+      <td class="border px-5 py-4"><%= site.name %></td>
+      <td class="border px-5 py-4"><%= site.address %></td>
+      <td class="border px-5 py-4"><%= site.billing_status %></td>
+      <td class="border px-5 py-4"><%= site.has_weather_station %></td>
+      <td class="border px-5 py-4"><%= length(site.controllers) %></td>
     </tr>
   <% end %>
   </tbody>

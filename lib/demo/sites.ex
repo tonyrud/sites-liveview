@@ -7,6 +7,7 @@ defmodule Demo.Sites do
   alias Demo.{
     Repo,
     Sites.Site,
+    Controllers.Controller
   }
 
   def all do
@@ -16,16 +17,22 @@ defmodule Demo.Sites do
   end
 
   def all(params) when is_list(params) do
-    query = from(s in Site)
+    query = from(s in Site,
+      join: c in assoc(s, :controllers),
+      preload: [controllers: c]
+      # group_by: c.id,
+      # select: [s]
+    )
 
     Enum.reduce(params, query, fn
-      {:name, ""}, query ->
-        query
+      # {:sort, %{sort_by: :controllers, sort_order: sort_order}}, query ->
+      #   from q in query, order_by: [{^sort_order, ^sort_by}]
+      {:sort, %{sort_by: sort_by, sort_order: sort_order}}, query ->
+        from q in query, order_by: [{^sort_order, ^sort_by}]
 
-      {:name, name}, query ->
-        from q in query, where: q.name == ^name
-
-    end)
-    |> Repo.all()
+      end)
+      |> Repo.all()
   end
+
+
 end
