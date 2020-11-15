@@ -10,16 +10,21 @@ docker-compose up --build
 
 ## Connect to Containers
 
+Note: must be in this directory to run `docker-compose` commands
+
 postgres instance
 
 ```bash
-docker exec -it demo_db_1 psql --host=localhost --user=postgres
+docker-compose exec db bash -c "psql --host=localhost --user=postgres"
 ```
 
 iex
 
 ```bash
-docker exec -it demo_phoenix_1 iex -S mix run
+docker-compose exec phoenix iex -S mix
+
+# Get all sites query
+Demo.Sites.all
 ```
 
 ## Links
@@ -33,3 +38,4 @@ docker exec -it demo_phoenix_1 iex -S mix run
 - [ ] Module and function docs
 - [ ] Unit tests
 - [ ] Styling
+- [ ] Enums on Ecto schemas

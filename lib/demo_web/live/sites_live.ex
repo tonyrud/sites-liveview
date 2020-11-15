@@ -3,15 +3,15 @@ defmodule DemoWeb.SitesLive do
 
   @impl true
   def mount(_params, _session, socket) do
-    {:ok, sites} = Demo.Sites.all()
-    sites = Enum.map(sites, fn site ->
-      %{
-        name: site.name,
-        count: length(site.controllers)
-      }
-    end)
 
-    {:ok, assign(socket, sites: sites)}
+    # sites = Enum.map(sites, fn site ->
+    #   %{
+    #     name: site.name,
+    #     count: length(site.controllers)
+    #   }
+    # end)
+
+    {:ok, assign(socket, sites: Demo.Sites.all())}
   end
 
 end

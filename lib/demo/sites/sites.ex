@@ -7,11 +7,8 @@ defmodule Demo.Sites do
   }
 
   def all do
-    result =
     Site
     |> Repo.all()
     |> Repo.preload(:controllers)
-
-    {:ok, result}
   end
 end

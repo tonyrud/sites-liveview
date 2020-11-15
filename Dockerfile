@@ -5,7 +5,7 @@ RUN apk update && \
   apk add --no-cache --virtual build-dependencies build-base && \
   apk add --no-cache postgresql && \
   apk add --no-cache inotify-tools && \
-  apk add postgresql-client && \
+  apk add --no-cache postgresql-client && \
   # necessary for live view locally
   apk add --no-cache nodejs npm openssh-client
 

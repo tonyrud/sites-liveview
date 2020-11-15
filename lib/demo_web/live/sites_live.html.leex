@@ -1,6 +1,6 @@
 <section>
   <h1>Sites</h1>
-  <%= for s <- @sites do %>
-        <div><%= s.name %> - <%= s.count %></div>
+  <%= for site <- @sites do %>
+        <div><%= site.name %> - <%= length(site.controllers) %></div>
       <% end %>
 </section>
