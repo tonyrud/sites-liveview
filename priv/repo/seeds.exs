@@ -20,7 +20,7 @@ Ecto.Migrator.with_repo(Repo, fn _repo ->
           id: String.to_integer(item["Site ID"]),
           name: item["Site Name"],
           address: item["Address"],
-          billing_status: item["Billing Status"],
+          billing_status: item["Billing Status"] |> String.downcase() |> String.to_atom(),
           has_weather_station: has_weather_station
         }
 

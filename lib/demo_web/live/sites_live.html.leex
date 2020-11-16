@@ -1,6 +1,12 @@
 <section>
   <h1 class="h1">Sites</h1>
 
+  <button
+    class="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded"
+    phx-click="edit">
+    Edit sites
+  </button>
+
   <form phx-change="filter" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
       <input type="text" name="filter" placeholder="Filter by ID, Name, or Address"/>
   </form>
@@ -8,6 +14,7 @@
   <table class="table-auto">
   <thead>
     <tr>
+      <th class="px-4 py-2">Edit</th>
       <th class="px-4 py-2">
         <%= sort_link(@socket, "Site Id", :id, @options) %>
       </th>
@@ -15,7 +22,7 @@
       <th class="px-4 py-2"><%= sort_link(@socket, "Address", :address, @options) %></th>
       <th class="px-4 py-2"><%= sort_link(@socket, "Billing Status", :billing_status, @options) %></th>
       <th class="px-4 py-2"><%= sort_link(@socket, "Has Weather Station", :has_weather_station, @options) %></th>
-      <th class="px-4 py-2"><%= sort_link(@socket, "Controller Count", :controllers, @options) %></th>
+      <th class="px-4 py-2"><%= sort_link(@socket, "Controller Count", :controllers_count, @options) %></th>
     </tr>
   </thead>
   <tbody>
@@ -23,12 +30,19 @@
   <%= for site <- @sites do %>
 
     <tr>
+      <td>
+        <input
+          phx-value-id="<%= site.id %>"
+          name="checked"
+          class="mr-2 leading-tight"
+          type="checkbox">
+      </td>
       <td class="border px-5 py-4"><%= site.id %></td>
       <td class="border px-5 py-4"><%= site.name %></td>
       <td class="border px-5 py-4"><%= site.address %></td>
       <td class="border px-5 py-4"><%= site.billing_status %></td>
-      <td class="border px-5 py-4"><%= site.has_weather_station %></td>
-      <td class="border px-5 py-4"><%= length(site.controllers) %></td>
+      <td class="border px-5 py-4"><%= change_weather_text(site.has_weather_station) %></td>
+      <td class="border px-5 py-4"><%= site.controllers_count %></td>
     </tr>
   <% end %>
   </tbody>

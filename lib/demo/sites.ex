@@ -6,25 +6,22 @@ defmodule Demo.Sites do
 
   alias Demo.{
     Repo,
-    Sites.Site,
-    Controllers.Controller
+    Sites.Site
   }
 
+  @base_all_query from(s in Site,
+    join: c in assoc(s, :controllers),
+    group_by: s.id,
+    select_merge: %{controllers_count: count(c.site_id)}
+  )
+
   def all do
-    Site
-    |> Repo.all()
-    |> Repo.preload(:controllers)
+   Repo.all(@base_all_query)
   end
 
   def all(params) when is_list(params) do
-    query = from(s in Site,
-      join: c in assoc(s, :controllers),
-      preload: [controllers: c]
-      # group_by: c.id,
-      # select: [s]
-    )
 
-    Enum.reduce(params, query, fn
+    Enum.reduce(params, @base_all_query, fn
       {:filter, %{filter: ""}}, query ->
         from q in query, order_by: [{:asc, :id}]
 
@@ -32,6 +29,9 @@ defmodule Demo.Sites do
         from q in query,
         where: ilike(fragment("concat(?, ?, ?)", q.id, q.name, q.address), ^"%#{filter}%")
 
+
+      {:sort, %{sort_by: :controllers_count, sort_order: sort_order}}, query ->
+        from q in query, order_by: [{^sort_order, :count}]
 
       {:sort, %{sort_by: sort_by, sort_order: sort_order}}, query ->
         from q in query, order_by: [{^sort_order, ^sort_by}]

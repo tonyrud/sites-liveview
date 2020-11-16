@@ -8,7 +8,8 @@ defmodule DemoWeb.SitesLive do
     {:ok, assign(
       socket,
       temporary_assigns: [sites: []],
-      page_title: "Sites"
+      page_title: "Sites",
+      checked: [],
       )}
     end
 
@@ -36,6 +37,25 @@ defmodule DemoWeb.SitesLive do
     socket = assign(socket, params ++ [sites: Sites.all(params)])
     {:noreply, socket}
   end
+
+  @impl true
+  def handle_event("check", %{"id" => id}, socket) do
+    checked = if Enum.member?(socket.assigns.checked, id) do
+      Enum.filter(socket.assigns.checked, &(&1 != id))
+    else
+      socket.assigns.checked ++ [id]
+    end
+
+    socket = assign(socket, checked: checked)
+    {:noreply, socket}
+  end
+
+  def handle_event("edit", _, socket) do
+    {:noreply, push_redirect(socket, to: "/sites/edit")}
+  end
+
+  defp change_weather_text(true), do: "Yes"
+  defp change_weather_text(false), do: "No"
 
 
   defp sort_link(socket, text, sort_by, options) do
