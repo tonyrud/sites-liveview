@@ -25,8 +25,14 @@ defmodule Demo.Sites do
     )
 
     Enum.reduce(params, query, fn
-      # {:sort, %{sort_by: :controllers, sort_order: sort_order}}, query ->
-      #   from q in query, order_by: [{^sort_order, ^sort_by}]
+      {:filter, %{filter: ""}}, query ->
+        from q in query, order_by: [{:asc, :id}]
+
+      {:filter, %{filter: filter}}, query ->
+        from q in query,
+        where: ilike(fragment("concat(?, ?, ?)", q.id, q.name, q.address), ^"%#{filter}%")
+
+
       {:sort, %{sort_by: sort_by, sort_order: sort_order}}, query ->
         from q in query, order_by: [{^sort_order, ^sort_by}]
 

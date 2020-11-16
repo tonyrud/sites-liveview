@@ -1,6 +1,9 @@
 <section>
-  <h1>Sites</h1>
+  <h1 class="h1">Sites</h1>
 
+  <form phx-change="filter" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+      <input type="text" name="filter" placeholder="Filter by ID, Name, or Address"/>
+  </form>
 
   <table class="table-auto">
   <thead>
@@ -15,7 +18,7 @@
       <th class="px-4 py-2"><%= sort_link(@socket, "Controller Count", :controllers, @options) %></th>
     </tr>
   </thead>
-  <tbody
+  <tbody>
 
   <%= for site <- @sites do %>
 

@@ -29,8 +29,16 @@ defmodule DemoWeb.SitesLive do
     {:noreply, socket}
   end
 
+  @impl true
+  def handle_event("filter", %{"filter" => filter}, socket) do
+    params = [filter: %{filter: filter}]
+
+    socket = assign(socket, params ++ [sites: Sites.all(params)])
+    {:noreply, socket}
+  end
+
+
   defp sort_link(socket, text, sort_by, options) do
-    IO.inspect(options, label: "options")
     text =
       if sort_by == options.sort_by do
         "#{text} #{arrow_direction(options.sort_order)}"
