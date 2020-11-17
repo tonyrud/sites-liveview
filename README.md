@@ -24,7 +24,7 @@ iex
 docker-compose exec phoenix iex -S mix
 
 # Get all sites query
-Demo.Sites.all
+Demo.Sites.list_sites
 ```
 
 ## Links

@@ -5,17 +5,17 @@ defmodule DemoWeb.SitesLive do
 
   @impl true
   def mount(_params, _session, socket) do
-    {:ok, assign(
-      socket,
-      temporary_assigns: [sites: []],
-      page_title: "Sites",
-      checked: [],
-      )}
-    end
+    {:ok,
+     assign(
+       socket,
+       temporary_assigns: [sites: []],
+       page_title: "Sites",
+       checked: []
+     )}
+  end
 
-    @impl true
-    def handle_params(params, _url, socket) do
-
+  @impl true
+  def handle_params(params, _url, socket) do
     sort_by = (params["sort_by"] || "id") |> String.to_atom()
     sort_order = (params["sort_order"] || "asc") |> String.to_atom()
 
@@ -24,7 +24,7 @@ defmodule DemoWeb.SitesLive do
     socket =
       assign(socket,
         options: sort_options,
-        sites: Sites.all(sort: sort_options)
+        sites: Sites.list_sites(sort: sort_options)
       )
 
     {:noreply, socket}
@@ -34,17 +34,18 @@ defmodule DemoWeb.SitesLive do
   def handle_event("filter", %{"filter" => filter}, socket) do
     params = [filter: %{filter: filter}]
 
-    socket = assign(socket, params ++ [sites: Sites.all(params)])
+    socket = assign(socket, params ++ [sites: Sites.list_sites(params)])
     {:noreply, socket}
   end
 
   @impl true
-  def handle_event("check", %{"id" => id}, socket) do
-    checked = if Enum.member?(socket.assigns.checked, id) do
-      Enum.filter(socket.assigns.checked, &(&1 != id))
-    else
-      socket.assigns.checked ++ [id]
-    end
+  def handle_event("check", %{"value" => id}, socket) do
+    checked =
+      if Enum.member?(socket.assigns.checked, id) do
+        Enum.filter(socket.assigns.checked, &(&1 != id))
+      else
+        socket.assigns.checked ++ [id]
+      end
 
     socket = assign(socket, checked: checked)
     {:noreply, socket}
@@ -54,9 +55,12 @@ defmodule DemoWeb.SitesLive do
     {:noreply, push_redirect(socket, to: "/sites/edit")}
   end
 
+  def handle_event(_event, _, socket) do
+    {:noreply, socket}
+  end
+
   defp change_weather_text(true), do: "Yes"
   defp change_weather_text(false), do: "No"
-
 
   defp sort_link(socket, text, sort_by, options) do
     text =
@@ -82,5 +86,4 @@ defmodule DemoWeb.SitesLive do
 
   defp arrow_direction(:asc), do: "↓"
   defp arrow_direction(:desc), do: "↑"
-
 end

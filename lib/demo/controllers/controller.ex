@@ -3,7 +3,6 @@ defmodule Demo.Controllers.Controller do
 
   schema "controllers" do
     field :name, :string
-    # field :mode, Ecto.Enum, values: [:smart, :basic]
     field :mode, :string
     field :type, :string
 
