@@ -11,7 +11,7 @@
     Edit <%= length(@selected_sites) %> sites
   </button>
 
-  <form phx-change="filter" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+  <form phx-change="filter" class="my-8">
       <input type="text" name="filter" placeholder="Filter by ID, Name, or Address"/>
   </form>
 
@@ -34,12 +34,13 @@
   <%= for site <- @sites do %>
 
     <tr>
-      <td>
+      <td style="position: relative;">
+        <label for="<%= site.id %>" class="check-box"></label>
         <input
           phx-click="check"
           phx-update="ignore"
           phx-value-id="<%= site.id %>"
-          name="checked"
+          id="<%= site.id %>"
 
           class="mr-2 leading-tight"
           type="checkbox">
@@ -87,7 +88,7 @@
               Has Weather Station?
             </label>
             <select
-              class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+              class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500 mb-8"
               name=<%= "#{selected_site.id}[has_weather_station]" %>
             >
               <%= for o <- [%{value: true, name: "Yes"}, %{value: false, name: "No"}] do %>
@@ -108,6 +109,9 @@
           class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
           >
           Submit Changes
+        </button>
+        <button phx-click="close-modal" class="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded">
+          Close
         </button>
       </form>
 

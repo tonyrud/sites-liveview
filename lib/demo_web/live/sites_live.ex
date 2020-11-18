@@ -44,6 +44,16 @@ defmodule DemoWeb.SitesLive do
     {:noreply, socket}
   end
 
+  def handle_event("close_modal", _, socket) do
+    socket =
+      assign(
+        socket,
+        modal: @hidden_modal_styles
+      )
+
+    {:noreply, socket}
+  end
+
   @impl true
   def handle_event("check", %{"id" => selected_id}, socket) do
     %{assigns: %{selected_sites: selected_sites, sites: sites}} = socket
@@ -158,11 +168,5 @@ defmodule DemoWeb.SitesLive do
     else
       ""
     end
-  end
-
-  defp checked_box(sites, id) do
-    IO.inspect(sites)
-    IO.inspect(id)
-    ""
   end
 end

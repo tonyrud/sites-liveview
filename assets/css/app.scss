@@ -68,7 +68,6 @@
 
 .btn:disabled:hover {
   background-color: rgba(66,153,225, 1);
-  // opacity: .5;
 }
 
 
@@ -130,4 +129,16 @@
   width: 30%;
   position: relative;
   transition: all 5s ease-in-out;
+  overflow-y: auto;
+  height: 80vh;
+}
+
+.check-box {
+  background: red;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  opacity: 0;
+  cursor: pointer;
 }
