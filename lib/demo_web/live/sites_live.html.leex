@@ -2,8 +2,12 @@
   <h1 class="h1">Sites</h1>
 
   <button
-    class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-    phx-click="edit">
+    class="btn bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+    phx-click="edit"
+    <%= if Enum.empty?(@selected_sites) do %>
+      <%= "disabled" %>
+    <% end %>
+  >
     Edit <%= length(@selected_sites) %> sites
   </button>
 
@@ -36,7 +40,7 @@
           phx-update="ignore"
           phx-value-id="<%= site.id %>"
           name="checked"
-          <%= checked_box(@socket, site.id) %>
+
           class="mr-2 leading-tight"
           type="checkbox">
       </td>
@@ -52,57 +56,61 @@
 </table>
 </section>
 
-<div id="modal">
-  <form phx-submit="save_edits">
-    <%= for selected_site <- @selected_sites do %>
-      <h3><%= selected_site.name %><h3>
+<div id="modal" class="overlay"
+  style="visibility: <%= @modal.visibility %>; opacity: <%= @modal.opacity %>">
+  <div class="modal-content">
+    <form phx-submit="save_edits">
+      <%= for selected_site <- @selected_sites do %>
+        <h2><%= selected_site.name %><h2>
 
-        <div class="pb-5">
-        <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-state">
-            Billing Status
-          </label>
-          <select
-            class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-            name=<%= "#{selected_site.id}[billing_status]" %>
-          >
-            <%= for o <- [%{value: "paid", name: "Paid"}, %{value: "unpaid", name: "Unpaid"}] do %>
-            <option value="<%= o.value %>"
-              <%= selected_billing_status(selected_site, o.value) %>
+          <div class="pb-5">
+          <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-state">
+              Billing Status
+            </label>
+            <select
+              class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+              name=<%= "#{selected_site.id}[billing_status]" %>
             >
+              <%= for o <- [%{value: "paid", name: "Paid"}, %{value: "unpaid", name: "Unpaid"}] do %>
+              <option value="<%= o.value %>"
+                <%= selected_billing_status(selected_site, o.value) %>
+              >
 
-              <%= o.name %>
-            </option>
-          <% end %>
-          </select>
-        </div>
+                <%= o.name %>
+              </option>
+            <% end %>
+            </select>
+          </div>
 
-        <div class="pb-5">
-        <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-state">
-            Has Weather Station?
-          </label>
-          <select
-            class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-            name=<%= "#{selected_site.id}[has_weather_station]" %>
-          >
-            <%= for o <- [%{value: true, name: "Yes"}, %{value: false, name: "No"}] do %>
-            <option value="<%= o.value %>"
-              <%= selected_has_weather_station(selected_site, o.value) %>
+          <div class="pb-5">
+          <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-state">
+              Has Weather Station?
+            </label>
+            <select
+              class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+              name=<%= "#{selected_site.id}[has_weather_station]" %>
             >
+              <%= for o <- [%{value: true, name: "Yes"}, %{value: false, name: "No"}] do %>
+              <option value="<%= o.value %>"
+                <%= selected_has_weather_station(selected_site, o.value) %>
+              >
 
-              <%= o.name %>
-            </option>
-          <% end %>
-          </select>
-        </div>
+                <%= o.name %>
+              </option>
+            <% end %>
+            </select>
+          </div>
 
-    <% end %>
+      <% end %>
 
-      <button
-        type="submit"
-        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-        >
-        Submit Changes
-      </button>
-    </form>
+        <button
+          type="submit"
+          class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+          >
+          Submit Changes
+        </button>
+      </form>
+
+  </div>
 
 </div>

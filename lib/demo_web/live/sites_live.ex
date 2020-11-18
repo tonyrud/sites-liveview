@@ -1,7 +1,12 @@
 defmodule DemoWeb.SitesLive do
   use DemoWeb, :live_view
 
-  alias Demo.{Sites.Site, Sites}
+  alias Demo.Sites
+
+  @hidden_modal_styles %{
+    visibility: "hidden",
+    opacity: 0
+  }
 
   @impl true
   def mount(_params, _session, socket) do
@@ -10,7 +15,8 @@ defmodule DemoWeb.SitesLive do
        socket,
        temporary_assigns: [sites: []],
        page_title: "Sites",
-       selected_sites: []
+       selected_sites: [],
+       modal: @hidden_modal_styles
      )}
   end
 
@@ -71,6 +77,15 @@ defmodule DemoWeb.SitesLive do
 
   def handle_event("edit", _, socket) do
     # open modal here
+    socket =
+      assign(
+        socket,
+        modal: %{
+          visibility: "inherit",
+          opacity: 1
+        }
+      )
+
     {:noreply, socket}
   end
 
@@ -91,7 +106,8 @@ defmodule DemoWeb.SitesLive do
     socket =
       assign(
         socket,
-        selected_sites: [],
+        # selected_sites: [],
+        modal: @hidden_modal_styles,
         sites: sites
       )
 

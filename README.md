@@ -37,5 +37,5 @@ Demo.Sites.list_sites
 
 - [ ] Module and function docs
 - [ ] Unit tests
-- [ ] Styling
-- [ ] Enums on Ecto schemas
+- [ ] Modal as a LiveComponent
+- [ ] Uncheck boxes after editing

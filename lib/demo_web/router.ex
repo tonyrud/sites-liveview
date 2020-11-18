@@ -17,9 +17,7 @@ defmodule DemoWeb.Router do
   scope "/", DemoWeb do
     pipe_through :browser
 
-    live "/", PageLive, :index
     live "/sites", SitesLive
-    live "/sites/edit", EditLive
   end
 
   # Other scopes may use custom stacks.
