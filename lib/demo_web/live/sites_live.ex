@@ -1,7 +1,7 @@
 defmodule DemoWeb.SitesLive do
   use DemoWeb, :live_view
 
-  alias Demo.Sites
+  alias Demo.{Sites.Site, Sites}
 
   @impl true
   def mount(_params, _session, socket) do
@@ -10,7 +10,7 @@ defmodule DemoWeb.SitesLive do
        socket,
        temporary_assigns: [sites: []],
        page_title: "Sites",
-       checked: []
+       selected_sites: []
      )}
   end
 
@@ -39,23 +39,62 @@ defmodule DemoWeb.SitesLive do
   end
 
   @impl true
-  def handle_event("check", %{"value" => id}, socket) do
-    checked =
-      if Enum.member?(socket.assigns.checked, id) do
-        Enum.filter(socket.assigns.checked, &(&1 != id))
+  def handle_event("check", %{"id" => selected_id}, socket) do
+    %{assigns: %{selected_sites: selected_sites, sites: sites}} = socket
+
+    selected_id = String.to_integer(selected_id)
+
+    # find the selected site to edit
+    site =
+      Enum.find(sites, fn item ->
+        item.id === selected_id
+      end)
+
+    checked_ids = Enum.map(selected_sites, & &1.id)
+
+    # remove site if it's already in the selected sites list
+    selected_sites =
+      if selected_id in checked_ids do
+        Enum.filter(selected_sites, &(&1.id != selected_id))
       else
-        socket.assigns.checked ++ [id]
+        selected_sites ++ [site]
       end
 
-    socket = assign(socket, checked: checked)
+    socket =
+      assign(
+        socket,
+        selected_sites: selected_sites
+      )
+
     {:noreply, socket}
   end
 
   def handle_event("edit", _, socket) do
-    {:noreply, push_redirect(socket, to: "/sites/edit")}
+    # open modal here
+    {:noreply, socket}
   end
 
-  def handle_event(_event, _, socket) do
+  def handle_event("validate", _, socket) do
+    {:noreply, socket}
+  end
+
+  def handle_event("save_edits", form, socket) do
+    Enum.each(form, fn {id, changes} ->
+      id = String.to_integer(id)
+
+      Sites.update_site(id, changes)
+    end)
+
+    # get updated sites by sorted params
+    sites = Sites.list_sites(sort: socket.assigns.options)
+
+    socket =
+      assign(
+        socket,
+        selected_sites: [],
+        sites: sites
+      )
+
     {:noreply, socket}
   end
 
@@ -86,4 +125,28 @@ defmodule DemoWeb.SitesLive do
 
   defp arrow_direction(:asc), do: "↓"
   defp arrow_direction(:desc), do: "↑"
+
+  defp selected_billing_status(%{billing_status: billing_status}, option_name) do
+    option_name = String.to_atom(option_name)
+
+    if billing_status == option_name do
+      "selected=\"selected\""
+    else
+      ""
+    end
+  end
+
+  defp selected_has_weather_station(%{has_weather_station: has_weather_station}, option_name) do
+    if has_weather_station == option_name do
+      "selected=\"selected\""
+    else
+      ""
+    end
+  end
+
+  defp checked_box(sites, id) do
+    IO.inspect(sites)
+    IO.inspect(id)
+    ""
+  end
 end

@@ -52,16 +52,19 @@ defmodule Demo.Sites do
   end
 
   def update_site(site_id, params) do
-    Repo.transaction(fn ->
-      case get_site(site_id) do
-        {:ok, %Site{} = site} ->
-          site
-          |> Site.update_changeset(params)
-          |> Repo.update()
+    {_transaction_result, update_result} =
+      Repo.transaction(fn ->
+        case get_site(site_id) do
+          {:ok, %Site{} = site} ->
+            site
+            |> Site.update_changeset(params)
+            |> Repo.update()
 
-        {:error, _reason} = error ->
-          error
-      end
-    end)
+          {:error, _reason} = error ->
+            error
+        end
+      end)
+
+    update_result
   end
 end

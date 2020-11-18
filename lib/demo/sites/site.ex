@@ -13,7 +13,7 @@ defmodule Demo.Sites.Site do
     has_many :controllers, Demo.Controllers.Controller
   end
 
-  def update_changeset(%__MODULE__{} = site, attributes) do
+  def update_changeset(%__MODULE__{} = site, attributes \\ %{}) do
     allowed_fields = ~w(
       has_weather_station
       billing_status
