@@ -10,15 +10,26 @@ defmodule Demo.Sites do
   }
 
   @base_list_query from(s in Site,
-                     join: c in assoc(s, :controllers),
+                     left_join: c in assoc(s, :controllers),
                      group_by: s.id,
-                     select_merge: %{controllers_count: count(c.site_id)}
+                     select_merge: %{
+                       controllers_count: fragment("count(?) as post_count", c.site_id)
+                     }
                    )
 
   def list_sites do
     Repo.all(@base_list_query)
   end
 
+  @doc """
+  Returns a list of sites matching the given `params`.
+
+  Example params:
+
+  [
+   sort: %{sort_by: :item, sort_order: :asc}
+  ]
+  """
   def list_sites(params) when is_list(params) do
     Enum.reduce(params, @base_list_query, fn
       {:filter, %{filter: ""}}, query ->
@@ -29,7 +40,7 @@ defmodule Demo.Sites do
           where: ilike(fragment("concat(?, ?, ?)", q.id, q.name, q.address), ^"%#{filter}%")
 
       {:sort, %{sort_by: :controllers_count, sort_order: sort_order}}, query ->
-        from q in query, order_by: [{^sort_order, :count}]
+        from q in query, order_by: [{^sort_order, fragment("post_count")}]
 
       {:sort, %{sort_by: sort_by, sort_order: sort_order}}, query ->
         from q in query, order_by: [{^sort_order, ^sort_by}]
