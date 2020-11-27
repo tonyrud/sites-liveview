@@ -10,9 +10,9 @@ do
 done
 
 echo "postgres is up - checking for database $POSTGRES_DB"
+mix ecto.drop
 
 GET_DB=$(PGPASSWORD=$POSTGRES_PASSWORD psql --user=$POSTGRES_USER --host=$POSTGRES_HOST --port=$POSTGRES_PORT -lqtA | grep -w $POSTGRES_DB)
-
 # Create, migrate, and seed database if it doesn't exist.
 if [ -z  $GET_DB ]
 then
