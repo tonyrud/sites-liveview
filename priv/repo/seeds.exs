@@ -22,7 +22,8 @@ Ecto.Migrator.with_repo(Repo, fn _repo ->
           name: item["Site Name"],
           address: item["Address"],
           billing_status: item["Billing Status"] |> String.downcase() |> String.to_atom(),
-          has_weather_station: has_weather_station
+          has_weather_station: has_weather_station,
+          lng_lat_point: %Geo.Point{coordinates: {item["Long"], item["Lat"]}, srid: 4326}
         }
 
         Repo.insert(site)

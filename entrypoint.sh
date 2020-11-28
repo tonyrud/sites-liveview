@@ -10,6 +10,7 @@ do
 done
 
 echo "postgres is up - checking for database $POSTGRES_DB"
+
 mix ecto.drop
 
 GET_DB=$(PGPASSWORD=$POSTGRES_PASSWORD psql --user=$POSTGRES_USER --host=$POSTGRES_HOST --port=$POSTGRES_PORT -lqtA | grep -w $POSTGRES_DB)
@@ -25,4 +26,4 @@ else
   mix ecto.migrate
 fi
 
-elixir --sname demo --cookie abc -S mix phx.server
+elixir --sname demo -S mix phx.server
