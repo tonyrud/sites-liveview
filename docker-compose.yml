@@ -12,6 +12,7 @@ services:
       POSTGRES_DB: demo_dev
       POSTGRES_PORT: 54322
       POSTGRES_HOST: host.docker.internal
+      ERL_AFLAGS: -kernel shell_history enabled
     ports:
       - '4000:4000'
     depends_on:

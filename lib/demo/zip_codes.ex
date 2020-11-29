@@ -2,74 +2,76 @@ defmodule Demo.ZipCodes do
 
   alias Demo.{
     Repo,
-    Sites.Site,
-    ZipCodes.ZipCode
+    Sites.Site
   }
 
-  def get_zip_codes_in_radius(zip_code, radius_in_miles) do
-    query = """
-        WITH target AS (SELECT lng_lat_point AS p FROM zip_codes WHERE zip_code = $1::varchar)
-        SELECT id, zip_code, city, state, lng_lat_point FROM zip_codes JOIN target ON true
-        WHERE ST_DWithin(p::geography, zip_codes.lng_lat_point::geography, $2::double precision)
-      """
+  defp sites_target_cte() do
+    "WITH target AS (SELECT lng_lat_point FROM sites WHERE id = $1::numeric)"
+  end
 
-    args = [zip_code, miles_to_meters(radius_in_miles)]
+  defp zipcode_target_cte() do
+    "WITH target AS (SELECT lng_lat_point FROM zip_codes WHERE zip_code = $1::varchar)"
+  end
 
-    case Repo.query(query, args, log: true) do
-      {:ok, %Postgrex.Result{columns: cols, rows: rows}}->
-        results =
-          Enum.map(rows, fn row ->
-            Repo.load(ZipCode, {cols, row})
-          end)
-
-        {:ok, results}
-
-      _ ->
-        {:error, :not_found}
-    end
+  defp base_geo_query() do
+    """
+    SELECT
+        s.name,
+        s.address,
+        ROUND((ST_Distance(s.lng_lat_point::geometry, ST_Transform(t.lng_lat_point, 4326)::geography) / 1609.344)::numeric, 2) as distance_in_miles
+      FROM
+        sites s
+      CROSS JOIN target t
+      WHERE
+        ST_DWithin(s.lng_lat_point::geometry,
+        ST_Transform (t.lng_lat_point, 4326)::geography,
+        $2::double precision)
+      ORDER BY
+        distance_in_miles;
+    """
   end
 
   def get_sites_in_radius_from_zip(zip_code, radius_in_miles) do
     query = """
-    WITH zip_point AS (
-      SELECT
-        lng_lat_point
-      from
-        zip_codes
-      where
-        zip_code = $1::varchar)
-      SELECT
-        s.name,
-        s.address,
-        ROUND((ST_Distance(s.lng_lat_point::geometry , ST_Transform (zp.lng_lat_point, 4326)::geography ) / 1609.344)::numeric, 2) as distance_in_miles
-      from
-        sites s
-      cross join zip_point zp
-      where
-        ST_DWithin(s.lng_lat_point::geometry,
-        ST_Transform (zp.lng_lat_point, 4326)::geography,
-        $2::double precision)
-      order by
-        distance_in_miles;
+      #{zipcode_target_cte()}
+
+      #{base_geo_query()}
     """
 
     args = [zip_code, miles_to_meters(radius_in_miles)]
 
+    run_query(query, args)
+  end
+
+  def get_sites_in_radius_from_site(site_id, radius_in_miles) do
+    query = """
+      #{sites_target_cte()}
+
+      #{base_geo_query()}
+    """
+
+    args = [site_id, miles_to_meters(radius_in_miles)]
+
+    run_query(query, args)
+  end
+
+  defp run_query(query, args) do
     case Repo.query(query, args, log: true) do
       {:ok, %Postgrex.Result{columns: cols, rows: rows}} ->
-        results =
-          Enum.map(rows, fn row ->
-            # convert the decimal selection from query above into float
-            row_with_float = List.update_at(row, 2, &Decimal.to_float(&1))
-
-            Repo.load(Site, {cols, row_with_float})
-          end)
+        results = Enum.map(rows, &load_site(&1, cols))
 
         {:ok, results}
 
-      _ ->
-        {:error, :not_found}
+      error ->
+        {:error, error}
     end
+  end
+
+  defp load_site(row, columns) do
+      # convert the decimal selection from query above into float
+      row_with_float = List.update_at(row, 2, &Decimal.to_float(&1))
+
+      Repo.load(Site, {columns, row_with_float})
   end
 
   defp miles_to_meters(miles), do: miles * 1609.344
