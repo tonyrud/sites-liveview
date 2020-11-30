@@ -11,7 +11,6 @@ defmodule Demo.Sites.Site do
     field :name, :string
 
     field :controllers_count, :integer, virtual: true
-    # TODO: this should be a virtual field, but returns nil from Repo.load
     field :distance_in_miles, :float, virtual: true
 
     has_many :controllers, Demo.Controllers.Controller

@@ -1,15 +1,6 @@
 <section>
-  <h1 class="h1">Sites</h1>
-  <div>
-    <%= live_redirect("Search Location",
-        to:
-          Routes.live_path(
-            @socket,
-            DemoWeb.GeoLocationsLive
-          )
-      )
-    %>
-  </div>
+  <h1 class="h1">All Sites</h1>
+
   <button
     class="btn bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
     phx-click="edit"
