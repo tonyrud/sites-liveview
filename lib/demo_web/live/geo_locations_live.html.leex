@@ -1,0 +1,80 @@
+<section>
+  <h1 class="h1">Sites Locations Search</h1>
+  <form phx-change="form_changed" class="my-8">
+    <div class="pb-5">
+      <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-state">
+          Search By:
+      </label>
+      <select
+        class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+        name="search_type"
+      >
+        <%= for o <- search_types() do %>
+        <option value="<%= o.value %>" <%= selected_option(@form_model["search_type"], o.value) %> >
+          <%= o.name %>
+        </option>
+      <% end %>
+      </select>
+    </div>
+
+    <%= if @form_model["search_type"] === "site" do %>
+    <div class="pb-5">
+      <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-state">
+          Site ID:
+      </label>
+      <select
+        class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+        name="site_id"
+      >
+      <%= for o <- @options.site_ids do %>
+        <option value="<%= o.value %>" <%= selected_option(@form_model["site_id"], o.value) %> >
+          <%= o.name %>
+        </option>
+      <% end %>
+      </select>
+    </div>
+    <% end %>
+    <%= if @form_model["search_type"] === "zip_code" do %>
+    <div class="pb-5">
+      <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-state">
+          ZIP Code:
+      </label>
+      <select
+        class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+        name="zip_code"
+      >
+        <%= for o <- @options.zipcodes do %>
+        <option value="<%= o.value %>" <%= selected_option(@form_model["zip_code"], o.value) %> >
+          <%= o.name %>
+        </option>
+      <% end %>
+      </select>
+    </div>
+    <% end %>
+    <div class="pb-5">
+      <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-state">
+          Distance:
+      </label>
+      <input type="number" value="<%= @form_model["distance"] %>" name="distance" placeholder="Distance"/>
+    </div>
+  </form>
+
+  <table class="table-auto">
+    <thead>
+      <tr>
+        <th class="px-4 py-2">Site ID</th>
+        <th class="px-4 py-2">Name</th>
+        <th class="px-4 py-2">Distance(miles)</th>
+      </tr>
+    </thead>
+    <tbody>
+    <%= for site <- @sites do %>
+      <tr>
+        <td class="border px-5 py-4"><%= site.id %></td>
+        <td class="border px-5 py-4"><%= site.name %></td>
+        <td class="border px-5 py-4"><%= site.distance_in_miles %></td>
+      </tr>
+    <% end %>
+    </tbody>
+  </table>
+</section>

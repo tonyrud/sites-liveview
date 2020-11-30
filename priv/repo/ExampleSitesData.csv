@@ -1,26 +1,26 @@
-Site ID,Site Name,Address,Billing Status,Has Weather Station Installed?
-19553,Peachtree Dr LOA,"299 Peachtree Dr., Lawndale, CA 90260",Paid,TRUE
-19348,Holden Residence,"411 Richardson Avenue, Hamden, CT 06514",Paid,FALSE
-19336,RAB West,"9219 Saxon Road, Moncks Corner, SC 29461",Paid,TRUE
-34148,Public Library 4,"612 South Magnolia Ave., Danvers, MA 01923",Unpaid,FALSE
-21004,Courthouse,"9279 Country Dr., Romeoville, IL 60446",Paid,TRUE
-25705,Southside Docks,"62 Swanson Court, South Portland, ME 04106",Paid,TRUE
-24747,Pollos Hermanos,"922 Madison Circle, Waterloo, IA 50701",Paid,TRUE
-28320,West Ballpark,"5 Brewery St., Endicott, NY 13760",Unpaid,FALSE
-18606,Richards’ Home,"8707 Green Ave., Grand Island, NE 68801",Unpaid,TRUE
-7928,Falling Water,"9956 N. Wentworth St., South Lyon, MI 48178",Paid,TRUE
-20393,Westlake,"7604 SW. Plymouth Ave., Bridgewater, NJ 08807",Paid,FALSE
-32726,Starcourt Plaza,"187 West White St., Arlington Heights, IL 60004",Paid,TRUE
-34482,Chequers West,"97 Wrangler St., Lawrence, MA 01841",Paid,TRUE
-15679,Poseda Moneda,"7473 William Road, Edison, NJ 08817",Paid,TRUE
-20570,Monument Park,"8689 Wood Lane, Mount Vernon, NY 10550",Paid,FALSE
-20571,Village Plaza,"889 E. Buttonwood St., Barberton, OH 44203",Unpaid,TRUE
-24624,Twin Lakes,"9897 Arlington Drive, North Fort Myers, FL 33917",Paid,TRUE
-29321,Dollywood Downtown,"8899 Shirley Dr., Soddy Daisy, TN 37379",Paid,FALSE
-30640,The Farm,"8412 W. Bishop St., Beltsville, MD 20705",Paid,TRUE
-7818,BikeMart,"520 Newcastle Avenue, East Orange, NJ 07017",Paid,TRUE
-8138,East Fields,"46 Summer St., Burlington, MA 01803",Paid,TRUE
-20573,Reading ISD,"347 East Hill Ave., Reading, MA 01867",Paid,TRUE
-20574,Semiside Supplies,"1 Hall Rd., Shelton, CT 06484",Unpaid,FALSE
-20575,Four Seasons Landscaping,"7697 Lookout Avenue, Kingsport, TN 37660",Paid,TRUE
-8783,RAB East,"177 Thatcher St., Niagara Falls, NY 14304",Paid,TRUE
+Site ID,Site Name,Address,Billing Status,Has Weather Station Installed?,Lat,Long
+19553,Peachtree Dr LOA,"299 Peachtree Dr., Lawndale, CA 90260",Paid,TRUE,"42.09860","-86.11841"
+19348,Holden Residence,"411 Richardson Avenue, Hamden, CT 06514",Paid,FALSE,"40.09860","-81.11841"
+19336,RAB West,"9219 Saxon Road, Moncks Corner, SC 29461",Paid,TRUE,"46.09860","-77.11841"
+34148,Public Library 4,"612 South Magnolia Ave., Danvers, MA 01923",Unpaid,FALSE,"44.09860","-66.11841"
+21004,Courthouse,"9279 Country Dr., Romeoville, IL 60446",Paid,TRUE,"22.09860","-82.51841"
+25705,Southside Docks,"62 Swanson Court, South Portland, ME 04106",Paid,TRUE,"43.19860","-85.31841"
+24747,Pollos Hermanos,"922 Madison Circle, Waterloo, IA 50701",Paid,TRUE,"41.89860","-85.61841"
+28320,West Ballpark,"5 Brewery St., Endicott, NY 13760",Unpaid,FALSE,"49.09860","-88.21841"
+18606,Richards’ Home,"8707 Green Ave., Grand Island, NE 68801",Unpaid,TRUE,"39.09860","-82.11841"
+7928,Falling Water,"9956 N. Wentworth St., South Lyon, MI 48178",Paid,TRUE,"36.19860","-85.51841"
+20393,Westlake,"7604 SW. Plymouth Ave., Bridgewater, NJ 08807",Paid,FALSE,"41.69860","-81.21841"
+32726,Starcourt Plaza,"187 West White St., Arlington Heights, IL 60004",Paid,TRUE,"41.07860","-86.11841"
+34482,Chequers West,"97 Wrangler St., Lawrence, MA 01841",Paid,TRUE,"41.02860","-85.71841"
+15679,Poseda Moneda,"7473 William Road, Edison, NJ 08817",Paid,TRUE,"41.01860","-85.2841"
+20570,Monument Park,"8689 Wood Lane, Mount Vernon, NY 10550",Paid,FALSE,"43.19860","-81.11841"
+20571,Village Plaza,"889 E. Buttonwood St., Barberton, OH 44203",Unpaid,TRUE,"43.09860","-75.11841"
+24624,Twin Lakes,"9897 Arlington Drive, North Fort Myers, FL 33917",Paid,TRUE,"42.09860","-65.11841"
+29321,Dollywood Downtown,"8899 Shirley Dr., Soddy Daisy, TN 37379",Paid,FALSE,"41.16860","55.11841"
+30640,The Farm,"8412 W. Bishop St., Beltsville, MD 20705",Paid,TRUE,"41.29860","-85.11841"
+7818,BikeMart,"520 Newcastle Avenue, East Orange, NJ 07017",Paid,TRUE,"41.19860","-85.91841"
+8138,East Fields,"46 Summer St., Burlington, MA 01803",Paid,TRUE,"41.89860","-85.81841"
+20573,Reading ISD,"347 East Hill Ave., Reading, MA 01867",Paid,TRUE,"41.79860","-85.71841"
+20574,Semiside Supplies,"1 Hall Rd., Shelton, CT 06484",Unpaid,FALSE,"41.07860","-85.17841"
+20575,Four Seasons Landscaping,"7697 Lookout Avenue, Kingsport, TN 37660",Paid,TRUE,"41.03860","-85.13841"
+8783,RAB East,"177 Thatcher St., Niagara Falls, NY 14304",Paid,TRUE,"41.05860","-85.17841"
