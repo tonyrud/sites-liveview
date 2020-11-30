@@ -6,54 +6,56 @@
           Search By:
       </label>
       <select
-        phx-update="ignore"
         class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-        name="search-type"
+        name="search_type"
       >
         <%= for o <- search_types() do %>
-        <option value="<%= o.value %>" <%= selected_option(@form_model.search_type, o.value) %> >
+        <option value="<%= o.value %>" <%= selected_option(@form_model["search_type"], o.value) %> >
           <%= o.name %>
         </option>
       <% end %>
       </select>
     </div>
+
+    <%= if @form_model["search_type"] === "site" do %>
     <div class="pb-5">
       <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-state">
           Site ID:
       </label>
       <select
-        phx-update="ignore"
         class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-        name="site-id"
+        name="site_id"
       >
-        <%= for o <- site_options() do %>
-        <option value="<%= o.value %>" <%= selected_option(@form_model.site_id, o.value) %> >
+      <%= for o <- @options.site_ids do %>
+        <option value="<%= o.value %>" <%= selected_option(@form_model["site_id"], o.value) %> >
           <%= o.name %>
         </option>
       <% end %>
       </select>
     </div>
+    <% end %>
+    <%= if @form_model["search_type"] === "zip_code" do %>
     <div class="pb-5">
       <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-state">
-          Site ID:
+          ZIP Code:
       </label>
       <select
-        phx-update="ignore"
         class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-        name="zip-code"
+        name="zip_code"
       >
-        <%= for o <- zipcode_options() do %>
-        <option value="<%= o.value %>" <%= selected_option(@form_model.site_id, o.value) %> >
+        <%= for o <- @options.zipcodes do %>
+        <option value="<%= o.value %>" <%= selected_option(@form_model["zip_code"], o.value) %> >
           <%= o.name %>
         </option>
       <% end %>
       </select>
     </div>
+    <% end %>
     <div class="pb-5">
       <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-state">
           Distance:
       </label>
-      <input type="number" value="<%= @form_model.distance %>" name="distance" placeholder="Distance"/>
+      <input type="number" value="<%= @form_model["distance"] %>" name="distance" placeholder="Distance"/>
     </div>
   </form>
 

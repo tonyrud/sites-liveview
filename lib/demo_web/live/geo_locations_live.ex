@@ -13,27 +13,34 @@ defmodule DemoWeb.GeoLocationsLive do
        socket,
        temporary_assigns: [sites: []],
        page_title: "Sites | Location Search",
-       sites: []
+       options: %{
+         zipcodes: zipcode_options(),
+         site_ids: site_options()
+       }
      )}
   end
 
   @impl true
   def handle_params(params, _url, socket) do
-    IO.inspect(params, label: "PARAMS")
-    distance = params["distance"]
-    search_type = params["search_type"]
+    IO.inspect(params, label: "URL PARAMS")
+
+    distance = params["distance"] || "0"
+    search_type = params["search_type"] || "zip_code"
     site_id = params["site_id"]
+    zip_code = params["zip_code"]
 
     form_model = %{
-      distance: distance,
-      search_type: search_type,
-      site_id: site_id
+      "distance" => distance,
+      "search_type" => search_type,
+      "site_id" => site_id,
+      "zip_code" => zip_code
     }
 
     {:ok, sites_in_radius} =
       case search_type do
-        "zip-code" -> ZipCodes.get_sites_in_radius_from_zip("46805", distance)
+        "zip_code" -> ZipCodes.get_sites_in_radius_from_zip(zip_code, distance)
         "site" -> ZipCodes.get_sites_in_radius_from_site(site_id, distance)
+        nil -> {:ok, []}
       end
 
     socket =
@@ -45,40 +52,59 @@ defmodule DemoWeb.GeoLocationsLive do
     {:noreply, socket}
   end
 
-
   @impl true
-  def handle_event("form_changed", %{"distance" => distance, "search-type" => search_type, "site-id" => site_id}, socket) do
+  def handle_event("form_changed", params, socket) do
+    socket = push_param(socket, Map.delete(params, "_target"))
 
-    socket =
+    {:noreply, socket}
+  end
+
+  defp push_param(socket, new_params) do
+    new_params = Map.merge(socket.assigns.form_model, new_params)
+
+    form_deleted_keys =
+      if Map.get(new_params, "search_type") === "site" do
+        site_id = new_params["site_id"] || Enum.at(socket.assigns.options.site_ids, 0) |> Map.get(:value)
+
+        new_params
+          |> Map.delete("zip_code")
+          |> Map.put("site_id", site_id)
+      else
+        zip = new_params["zip_code"] || Enum.at(socket.assigns.options.zipcodes, 0) |> Map.get(:value)
+
+        new_params
+          |> Map.delete("site_id")
+          |> Map.put("zip_code", zip)
+      end
+
+
+    updated_params =
+    form_deleted_keys
+      |> Map.to_list()
+      # remove nil values
+      |> Enum.filter(fn {_, v} -> !is_nil(v) end)
+        # remove empty string values
+      |> Enum.filter(fn {_, v} -> is_binary(v) && String.length(v) !== 0 end)
+
     push_patch(socket,
       to:
       Routes.live_path(
         socket,
         __MODULE__,
-        distance: distance,
-        search_type: search_type,
-        site_id: site_id
+        updated_params
       )
     )
-
-      {:noreply, socket}
-    end
-
-  @impl true
-  def handle_event("form_changed", stuff, socket) do
-    IO.inspect(stuff, label: "WAT")
-    {:noreply, assign(socket, sites: []) }
   end
 
   defp search_types() do
-    [%{value: "zip-code", name: "Zip Code"}, %{value: "site", name: "Site"}]
+    [%{value: "zip_code", name: "Zip Code"}, %{value: "site", name: "Site ID"}]
   end
 
   defp site_options() do
     [sort: %{sort_by: :id, sort_order: :asc}]
       |> Sites.list_sites()
       |> Enum.map(fn site ->
-        %{value: site.id, name: "#{site.id} - #{site.name}"}
+        %{value: "#{site.id}", name: "#{site.id} - #{site.name}"}
       end)
   end
 
@@ -91,7 +117,7 @@ defmodule DemoWeb.GeoLocationsLive do
 
   defp selected_option(current_selection, option_name) do
     current_selection =
-      if is_number(option_name) do
+      if is_number(option_name) && !is_number(current_selection) do
         String.to_integer(current_selection)
       else
         current_selection
