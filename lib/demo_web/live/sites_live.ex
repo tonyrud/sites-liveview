@@ -156,17 +156,13 @@ defmodule DemoWeb.SitesLive do
     option_name = String.to_atom(option_name)
 
     if billing_status == option_name do
-      "selected=\"selected\""
-    else
-      ""
+      "selected"
     end
   end
 
   defp selected_has_weather_station(%{has_weather_station: has_weather_station}, option_name) do
     if has_weather_station == option_name do
-      "selected=\"selected\""
-    else
-      ""
+      "selected"
     end
   end
 end

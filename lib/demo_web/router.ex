@@ -18,6 +18,7 @@ defmodule DemoWeb.Router do
     pipe_through :browser
 
     live "/sites", SitesLive
+    live "/sites/geo-location", GeoLocationsLive
   end
 
   # Other scopes may use custom stacks.
