@@ -10,7 +10,10 @@ phases:
   build:
     commands:
       - echo Entered the build phase...
-      - echo Build started on `date`
+      - mix do local.hex --force
+      - mix local.rebar --force
+      - mix deps.get
+      - mix do compile
+      - mix test
   # post_build:
   #   commands:
-  #     - mix test

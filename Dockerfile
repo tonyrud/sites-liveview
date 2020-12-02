@@ -23,6 +23,4 @@ RUN mix do compile
 
 RUN npm install --prefix assets
 
-CMD ["mix", "test"]
-
-# ENTRYPOINT ["sh", "./entrypoint.sh"]
+ENTRYPOINT ["sh", "./entrypoint.sh"]
