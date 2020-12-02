@@ -5,9 +5,6 @@ use Mix.Config
 # The MIX_TEST_PARTITION environment variable can be used
 # to provide built-in test partitioning in CI environment.
 # Run `mix help test` for more information.
-config :demo,
-  ecto_repos: []
-
 config :demo, repo: Demo.TestRepo
 
 # We don't run a server during test. If one is required,
