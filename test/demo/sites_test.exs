@@ -13,6 +13,6 @@ defmodule Demo.SitesTest do
   test "list_sites/0 should return 3 items" do
     sites = Sites.list_sites()
 
-    assert length(sites) === 5
+    assert length(sites) === 3
   end
 end
