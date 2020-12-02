@@ -6,9 +6,7 @@ defmodule Demo.Application do
   use Application
 
   def start(_type, _args) do
-    children = [
-      # Start the Ecto repository
-      Demo.Repo,
+    children = get_repo() ++ [
       # Start the Telemetry supervisor
       DemoWeb.Telemetry,
       # Start the PubSub system
@@ -23,6 +21,13 @@ defmodule Demo.Application do
     # for other strategies and supported options
     opts = [strategy: :one_for_one, name: Demo.Supervisor]
     Supervisor.start_link(children, opts)
+  end
+
+  defp get_repo do
+    case Mix.env() do
+      :test -> []
+      _ -> [Demo.Repo]
+    end
   end
 
   # Tell Phoenix to update the endpoint configuration

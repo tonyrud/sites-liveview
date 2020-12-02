@@ -1,0 +1,19 @@
+version: 0.2
+
+phases:
+  install:
+    commands:
+      - echo Entered the install phase...
+  pre_build:
+    commands:
+      - echo Entered the pre_build phase...
+  build:
+    commands:
+      - echo Entered the build phase...
+      - mix do local.hex --force
+      - mix local.rebar --force
+      - mix deps.get
+      - mix do compile
+      - mix test
+  # post_build:
+  #   commands:

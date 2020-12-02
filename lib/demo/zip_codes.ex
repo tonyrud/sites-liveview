@@ -1,10 +1,11 @@
 defmodule Demo.ZipCodes do
 
   alias Demo.{
-    Repo,
     Sites.Site,
     ZipCodes.ZipCode
   }
+
+  @repo Application.get_env(:demo, :repo)
 
   @miles_meters 1609.344
 
@@ -36,7 +37,7 @@ defmodule Demo.ZipCodes do
   end
 
   def list_zip_codes do
-    Repo.all(ZipCode)
+    @repo.all(ZipCode)
   end
 
   def get_sites_in_radius_from_zip(zip_code, radius_in_miles) do
@@ -66,7 +67,7 @@ defmodule Demo.ZipCodes do
   end
 
   defp run_query(query, args) do
-    case Repo.query(query, args, log: true) do
+    case @repo.query(query, args, log: true) do
       {:ok, %Postgrex.Result{columns: cols, rows: rows}} ->
         results = Enum.map(rows, &load_site(&1, cols))
 
@@ -86,7 +87,7 @@ defmodule Demo.ZipCodes do
         |> Decimal.to_float()
 
       # TODO: does not load virtual `distance_in_miles` column
-      site = Repo.load(Site, {columns, row})
+      site = @repo.load(Site, {columns, row})
 
       %Site{site | distance_in_miles: distance_in_miles}
   end

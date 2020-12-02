@@ -4,8 +4,9 @@ defmodule Demo.Sites do
   """
   import Ecto.Query
 
+  @repo Application.get_env(:demo, :repo)
+
   alias Demo.{
-    Repo,
     Sites.Site
   }
 
@@ -18,7 +19,7 @@ defmodule Demo.Sites do
                    )
 
   def list_sites do
-    Repo.all(@base_list_query)
+    @repo.all(@base_list_query)
   end
 
   @doc """
@@ -45,7 +46,7 @@ defmodule Demo.Sites do
       {:sort, %{sort_by: sort_by, sort_order: sort_order}}, query ->
         from q in query, order_by: [{^sort_order, ^sort_by}]
     end)
-    |> Repo.all()
+    |> @repo.all()
   end
 
   def get_site(site_id) do
@@ -53,7 +54,7 @@ defmodule Demo.Sites do
       from site in Site,
         where: site.id == ^site_id
 
-    case Repo.one(query) do
+    case @repo.one(query) do
       %Site{} = site ->
         {:ok, site}
 
@@ -64,12 +65,12 @@ defmodule Demo.Sites do
 
   def update_site(site_id, params) do
     {_transaction_result, update_result} =
-      Repo.transaction(fn ->
+      @repo.transaction(fn ->
         case get_site(site_id) do
           {:ok, %Site{} = site} ->
             site
             |> Site.update_changeset(params)
-            |> Repo.update()
+            |> @repo.update()
 
           {:error, _reason} = error ->
             error
