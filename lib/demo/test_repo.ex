@@ -1,9 +1,9 @@
 defmodule Demo.TestRepo do
-  # alias Ecto.Changeset
+  alias Ecto.Changeset
   alias Demo.Sites.Site
   alias Demo.ZipCodes.ZipCode
 
-  def all(%Ecto.Query{from: %{source: {_, Demo.Sites.Site}}}) do
+  def all(%Ecto.Query{from: %{source: {_, Site}}}) do
     [
       %Site{
         name: "Site 1"
@@ -26,5 +26,27 @@ defmodule Demo.TestRepo do
         zip_code: "20154"
       }
     ]
+  end
+
+  def one(%Ecto.Query{from: %{source: {_, Site}}}) do
+      %Site{
+        name: "Test name"
+      }
+  end
+
+  def one(_query), do: nil
+
+  def update(%Changeset{errors: [], changes: values}) do
+    {:ok, struct(Site, values)}
+  end
+
+  def update(changeset) do
+    {:error, changeset}
+  end
+
+  def transaction(_fn) do
+    {:ok, %Site{
+      name: "Test name"
+    }}
   end
 end

@@ -57,8 +57,7 @@
 </table>
 </section>
 
-<div id="modal" class="overlay"
-  style="visibility: <%= @modal.visibility %>; opacity: <%= @modal.opacity %>">
+<div id="modal" class="overlay <%=  if @modal, do: "visible", else: "hidden" %>">
   <div class="modal-content">
     <form phx-submit="save_edits">
       <%= for selected_site <- @selected_sites do %>

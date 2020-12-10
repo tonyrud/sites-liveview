@@ -22,6 +22,10 @@ defmodule Demo.Sites do
     @repo.all(@base_list_query)
   end
 
+  def subscribe() do
+    Phoenix.PubSub.subscribe(Demo.PubSub, "sites")
+  end
+
   @doc """
   Returns a list of sites matching the given `params`.
 
@@ -76,6 +80,8 @@ defmodule Demo.Sites do
             error
         end
       end)
+
+    IO.inspect(update_result, label: "UPDATED")
 
     update_result
   end

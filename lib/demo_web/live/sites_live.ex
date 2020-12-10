@@ -3,20 +3,17 @@ defmodule DemoWeb.SitesLive do
 
   alias Demo.Sites
 
-  @hidden_modal_styles %{
-    visibility: "hidden",
-    opacity: 0
-  }
-
   @impl true
   def mount(_params, _session, socket) do
+    if connected?(socket), do: Sites.subscribe()
+
     {:ok,
      assign(
        socket,
        temporary_assigns: [sites: []],
        page_title: "Sites",
        selected_sites: [],
-       modal: @hidden_modal_styles
+       modal: false
      )}
   end
 
@@ -48,12 +45,18 @@ defmodule DemoWeb.SitesLive do
     socket =
       assign(
         socket,
-        modal: @hidden_modal_styles
+        modal: false
       )
 
     {:noreply, socket}
   end
 
+  @doc """
+  Handles the click events for editing. Receives the %Site{} id and selects if it's not currently select,
+  and deselects if it is.
+
+  The id will be a string in html, and needs to be converted to an integer for correct comparison.
+  """
   @impl true
   def handle_event("check", %{"id" => selected_id}, socket) do
     %{assigns: %{selected_sites: selected_sites, sites: sites}} = socket
@@ -90,10 +93,7 @@ defmodule DemoWeb.SitesLive do
     socket =
       assign(
         socket,
-        modal: %{
-          visibility: "inherit",
-          opacity: 1
-        }
+        modal: true
       )
 
     {:noreply, socket}
@@ -117,7 +117,7 @@ defmodule DemoWeb.SitesLive do
       assign(
         socket,
         # selected_sites: [],
-        modal: @hidden_modal_styles,
+        modal: false,
         sites: sites
       )
 
