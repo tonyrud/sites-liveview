@@ -77,10 +77,10 @@ defmodule Demo.Sites do
             |> Site.update_changeset(params)
             |> @repo.update!()
 
-            {:error, _reason} = error ->
-              error
-          end
-        end)
+          {:error, _reason} = error ->
+            error
+        end
+      end)
 
     broadcast(update_result, :site_updated)
   end

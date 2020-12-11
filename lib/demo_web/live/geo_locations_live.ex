@@ -64,35 +64,36 @@ defmodule DemoWeb.GeoLocationsLive do
 
     form_deleted_keys =
       if Map.get(new_params, "search_type") === "site" do
-        site_id = new_params["site_id"] || Enum.at(socket.assigns.options.site_ids, 0) |> Map.get(:value)
+        site_id =
+          new_params["site_id"] || Enum.at(socket.assigns.options.site_ids, 0) |> Map.get(:value)
 
         new_params
-          |> Map.delete("zip_code")
-          |> Map.put("site_id", site_id)
+        |> Map.delete("zip_code")
+        |> Map.put("site_id", site_id)
       else
-        zip = new_params["zip_code"] || Enum.at(socket.assigns.options.zipcodes, 0) |> Map.get(:value)
+        zip =
+          new_params["zip_code"] || Enum.at(socket.assigns.options.zipcodes, 0) |> Map.get(:value)
 
         new_params
-          |> Map.delete("site_id")
-          |> Map.put("zip_code", zip)
+        |> Map.delete("site_id")
+        |> Map.put("zip_code", zip)
       end
 
-
     updated_params =
-    form_deleted_keys
+      form_deleted_keys
       |> Map.to_list()
       # remove nil values
       |> Enum.filter(fn {_, v} -> !is_nil(v) end)
-        # remove empty string values
+      # remove empty string values
       |> Enum.filter(fn {_, v} -> is_binary(v) && String.length(v) !== 0 end)
 
     push_patch(socket,
       to:
-      Routes.live_path(
-        socket,
-        __MODULE__,
-        updated_params
-      )
+        Routes.live_path(
+          socket,
+          __MODULE__,
+          updated_params
+        )
     )
   end
 
@@ -102,17 +103,17 @@ defmodule DemoWeb.GeoLocationsLive do
 
   defp site_options() do
     [sort: %{sort_by: :id, sort_order: :asc}]
-      |> Sites.list_sites()
-      |> Enum.map(fn site ->
-        %{value: "#{site.id}", name: "#{site.id} - #{site.name}"}
-      end)
+    |> Sites.list_sites()
+    |> Enum.map(fn site ->
+      %{value: "#{site.id}", name: "#{site.id} - #{site.name}"}
+    end)
   end
 
   defp zipcode_options() do
-      ZipCodes.list_zip_codes()
-      |> Enum.map(fn zip ->
-        %{value: zip.zip_code, name: "#{zip.zip_code} - #{zip.city}"}
-      end)
+    ZipCodes.list_zip_codes()
+    |> Enum.map(fn zip ->
+      %{value: zip.zip_code, name: "#{zip.zip_code} - #{zip.city}"}
+    end)
   end
 
   defp selected_option(current_selection, option_name) do
@@ -125,5 +126,4 @@ defmodule DemoWeb.GeoLocationsLive do
 
     if current_selection == option_name, do: "selected"
   end
-
 end

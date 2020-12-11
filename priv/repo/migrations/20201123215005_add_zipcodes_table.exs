@@ -2,14 +2,12 @@ defmodule Demo.Repo.Migrations.AddPostgisData do
   use Ecto.Migration
 
   def change do
-
     execute("CREATE EXTENSION IF NOT EXISTS postgis")
 
     create_if_not_exists table(:zip_codes) do
       add :zip_code, :string, size: 5, null: false
       add :city, :string, null: false
       add :state, :string, size: 2, null: false
-
     end
 
     # Add a field `lng_lat_point` with type `geometry(Point,4326)`.

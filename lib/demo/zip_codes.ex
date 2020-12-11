@@ -1,5 +1,4 @@
 defmodule Demo.ZipCodes do
-
   alias Demo.{
     Sites.Site,
     ZipCodes.ZipCode
@@ -79,26 +78,28 @@ defmodule Demo.ZipCodes do
   end
 
   defp load_site(row, columns) do
-      # convert the decimal selection from query above into float
-      # row_with_float = List.update_at(row, 3, &Decimal.to_float(&1))
-      distance_in_miles =
-        row
-        |> Enum.at(3)
-        |> Decimal.to_float()
+    # convert the decimal selection from query above into float
+    # row_with_float = List.update_at(row, 3, &Decimal.to_float(&1))
+    distance_in_miles =
+      row
+      |> Enum.at(3)
+      |> Decimal.to_float()
 
-      # TODO: does not load virtual `distance_in_miles` column
-      site = @repo.load(Site, {columns, row})
+    # TODO: does not load virtual `distance_in_miles` column
+    site = @repo.load(Site, {columns, row})
 
-      %Site{site | distance_in_miles: distance_in_miles}
+    %Site{site | distance_in_miles: distance_in_miles}
   end
 
   defp miles_to_meters(miles) when is_binary(miles) do
-    miles_integer = case miles do
-      "" -> 0
-      miles -> String.to_integer(miles)
-    end
+    miles_integer =
+      case miles do
+        "" -> 0
+        miles -> String.to_integer(miles)
+      end
 
     miles_integer * @miles_meters
   end
+
   defp miles_to_meters(miles), do: miles * @miles_meters
 end
