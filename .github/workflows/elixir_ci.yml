@@ -6,6 +6,9 @@ on:
   pull_request:
     branches: [main]
 
+env:
+  MIX_ENV: test
+
 jobs:
   build:
     name: Build and test
@@ -13,24 +16,30 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+
       - name: Set up Elixir
-        uses: actions/setup-elixir@v1
+        uses: actions/setup-elixir@v1.5
         with:
-          elixir-version: '1.11.2' # Define the elixir version [required]
-          otp-version: '23' # Define the OTP version [required]
-      # - name: Restore dependencies cache
-      #   uses: actions/cache@v2
-      #   with:
-      #     path: deps
-      #     key: ${{ runner.os }}-mix-${{ hashFiles('**/mix.lock') }}
-      #     restore-keys: ${{ runner.os }}-mix-
-      # - name: Install hex
-      #   run: mix do local.hex --force
-      # - name: Install rebar
-      #   run: mix local.rebar --force
-      - name: Install dependencies
-        run: mix deps.get
-      - name: Compile
-        run: mix do compile
+          experimental-otp: true
+          elixir-version: '1.10.2' # Define the elixir version [required]
+          otp-version: '22.2.8' # Define the OTP version [required]
+
+      - name: Restore dependencies cache
+        uses: actions/cache@v2
+        with:
+          path: deps
+          key: ${{ runner.os }}-mix-${{ hashFiles('**/mix.lock') }}
+          restore-keys: ${{ runner.os }}-mix-
+
+      - name: Install Mix Dependencies
+        if: steps.mix-cache.outputs.cache-hit != 'true'
+        run: |
+          mix local.rebar --force
+          mix local.hex --force
+          mix deps.get
+
+      - name: Check Formatting
+        run: mix format --check-formatted
+
       - name: Run tests
         run: mix test

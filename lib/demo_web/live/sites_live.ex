@@ -102,7 +102,7 @@ defmodule DemoWeb.SitesLive do
   end
 
   def handle_event("save_edits", form, socket) do
-    #iterate over selected sites, and update
+    # iterate over selected sites, and update
     Enum.each(form, fn {id, changes} ->
       id = String.to_integer(id)
 
@@ -129,23 +129,22 @@ defmodule DemoWeb.SitesLive do
     new_sites = Sites.list_sites(sort: socket.assigns.options)
 
     socket =
-    socket
-    |> update(
-      :sites,
-      fn _sites -> new_sites end
+      socket
+      |> update(
+        :sites,
+        fn _sites -> new_sites end
       )
       |> put_flash(:info, "#{updated_site.name} updated")
       |> assign(alert: true)
 
-      IO.inspect(socket, label: "SOCKET")
-      {:noreply, socket}
+    IO.inspect(socket, label: "SOCKET")
+    {:noreply, socket}
   end
 
   @impl true
   def handle_info(:clear_flash, socket) do
     {:noreply, assign(socket, alert: false)}
   end
-
 
   defp change_weather_text(true), do: "Yes"
   defp change_weather_text(false), do: "No"

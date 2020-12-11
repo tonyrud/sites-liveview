@@ -9,5 +9,4 @@ defmodule Demo.Repo.Migrations.CreateSites do
       add :has_weather_station, :boolean
     end
   end
-
 end

@@ -29,9 +29,9 @@ defmodule Demo.TestRepo do
   end
 
   def one(%Ecto.Query{from: %{source: {_, Site}}}) do
-      %Site{
-        name: "Test name"
-      }
+    %Site{
+      name: "Test name"
+    }
   end
 
   def one(_query), do: nil
@@ -45,8 +45,9 @@ defmodule Demo.TestRepo do
   end
 
   def transaction(_fn) do
-    {:ok, %Site{
-      name: "Test name"
-    }}
+    {:ok,
+     %Site{
+       name: "Test name"
+     }}
   end
 end

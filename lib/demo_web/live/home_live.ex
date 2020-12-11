@@ -4,11 +4,11 @@ defmodule DemoWeb.HomeLive do
   @impl true
   def mount(_params, _session, socket) do
     {:ok,
-    assign(
-      socket,
-      page_title: "Home"
-      )}
-    end
+     assign(
+       socket,
+       page_title: "Home"
+     )}
+  end
 
   @impl true
   def render(assigns) do
@@ -16,5 +16,4 @@ defmodule DemoWeb.HomeLive do
     <h1>No content</h1>
     """
   end
-
 end

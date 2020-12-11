@@ -46,3 +46,4 @@ Demo.Sites.list_sites
 - [ ] Handle lists flash messages
 - [ ] Modal as a LiveComponent
 - [ ] Uncheck boxes after editing
+- [ ] Add ci: credo, dialyxer, formatting
