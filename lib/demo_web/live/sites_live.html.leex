@@ -16,45 +16,43 @@
   </form>
 
   <table class="table-auto">
-  <thead>
-    <tr>
-      <th class="px-4 py-2">Edit</th>
-      <th class="px-4 py-2">
-        <%= sort_link(@socket, "Site Id", :id, @options) %>
-      </th>
-      <th class="px-4 py-2"><%= sort_link(@socket, "Name", :name, @options) %></th>
-      <th class="px-4 py-2"><%= sort_link(@socket, "Address", :address, @options) %></th>
-      <th class="px-4 py-2"><%= sort_link(@socket, "Billing Status", :billing_status, @options) %></th>
-      <th class="px-4 py-2"><%= sort_link(@socket, "Has Weather Station", :has_weather_station, @options) %></th>
-      <th class="px-4 py-2"><%= sort_link(@socket, "Controller Count", :controllers_count, @options) %></th>
-    </tr>
-  </thead>
-  <tbody>
+    <thead>
+      <tr>
+        <th class="px-4 py-2">Edit</th>
+        <th class="px-4 py-2">
+          <%= sort_link(@socket, "Site Id", :id, @options) %>
+        </th>
+        <th class="px-4 py-2"><%= sort_link(@socket, "Name", :name, @options) %></th>
+        <th class="px-4 py-2"><%= sort_link(@socket, "Address", :address, @options) %></th>
+        <th class="px-4 py-2"><%= sort_link(@socket, "Billing Status", :billing_status, @options) %></th>
+        <th class="px-4 py-2"><%= sort_link(@socket, "Has Weather Station", :has_weather_station, @options) %></th>
+        <th class="px-4 py-2"><%= sort_link(@socket, "Controller Count", :controllers_count, @options) %></th>
+      </tr>
+    </thead>
 
-  <%= for site <- @sites do %>
 
-    <tr>
-      <td style="position: relative;">
-        <label for="<%= site.id %>" class="check-box"></label>
-        <input
-          phx-click="check"
-          phx-update="ignore"
-          phx-value-id="<%= site.id %>"
-          id="<%= site.id %>"
+      <tbody id="sites" phx-update="prepend" >
+      <%= for site <- @sites do %>
+        <tr id="<%= site.id %>" >
+          <td style="position: relative;">
+            <input
+              phx-click="check"
+              phx-update="ignore"
+              phx-value-id="<%= site.id %>"
 
-          class="mr-2 leading-tight"
-          type="checkbox">
-      </td>
-      <td class="border px-5 py-4"><%= site.id %></td>
-      <td class="border px-5 py-4"><%= site.name %></td>
-      <td class="border px-5 py-4"><%= site.address %></td>
-      <td class="border px-5 py-4"><%= site.billing_status %></td>
-      <td class="border px-5 py-4"><%= change_weather_text(site.has_weather_station) %></td>
-      <td class="border px-5 py-4"><%= site.controllers_count %></td>
-    </tr>
-  <% end %>
-  </tbody>
-</table>
+              class="mr-2 leading-tight"
+              type="checkbox">
+          </td>
+          <td class="border px-5 py-4"><%= site.id %></td>
+          <td class="border px-5 py-4"><%= site.name %></td>
+          <td class="border px-5 py-4"><%= site.address %></td>
+          <td class="border px-5 py-4"><%= site.billing_status %></td>
+          <td class="border px-5 py-4"><%= change_weather_text(site.has_weather_station) %></td>
+          <td class="border px-5 py-4"><%= site.controllers_count %></td>
+        </tr>
+      <% end %>
+      </tbody>
+  </table>
 </section>
 
 <div id="modal" class="overlay <%=  if @modal, do: "visible", else: "hidden" %>">

@@ -5,6 +5,7 @@ defmodule Demo.Sites do
   import Ecto.Query
 
   @repo Application.get_env(:demo, :repo)
+  @sites_subscription_channel inspect(__MODULE__)
 
   alias Demo.{
     Sites.Site
@@ -23,7 +24,7 @@ defmodule Demo.Sites do
   end
 
   def subscribe() do
-    Phoenix.PubSub.subscribe(Demo.PubSub, "sites")
+    Phoenix.PubSub.subscribe(Demo.PubSub, @sites_subscription_channel)
   end
 
   @doc """
@@ -74,15 +75,23 @@ defmodule Demo.Sites do
           {:ok, %Site{} = site} ->
             site
             |> Site.update_changeset(params)
-            |> @repo.update()
+            |> @repo.update!()
 
-          {:error, _reason} = error ->
-            error
-        end
-      end)
+            {:error, _reason} = error ->
+              error
+          end
+        end)
 
-    IO.inspect(update_result, label: "UPDATED")
-
-    update_result
+    broadcast(update_result, :site_updated)
   end
+
+  def broadcast(updated_site, event) do
+    Phoenix.PubSub.broadcast(
+      Demo.PubSub,
+      @sites_subscription_channel,
+      {event, updated_site}
+    )
+  end
+
+  # def broadcast({:error, _reason} = error, _event), do: error
 end

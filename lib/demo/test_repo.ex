@@ -36,11 +36,11 @@ defmodule Demo.TestRepo do
 
   def one(_query), do: nil
 
-  def update(%Changeset{errors: [], changes: values}) do
+  def update!(%Changeset{errors: [], changes: values}) do
     {:ok, struct(Site, values)}
   end
 
-  def update(changeset) do
+  def update!(changeset) do
     {:error, changeset}
   end
 

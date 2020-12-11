@@ -1,5 +1,5 @@
 <main role="main" class="container">
-  <p class="alert alert-info" role="alert"
+  <p class="alert alert-info <%=  if @alert, do: "show", else: "" %>" role="alert"
     phx-click="lv:clear-flash"
     phx-value-key="info"><%= live_flash(@flash, :info) %></p>
 

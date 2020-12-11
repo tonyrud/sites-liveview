@@ -13,7 +13,8 @@ defmodule DemoWeb.SitesLive do
        temporary_assigns: [sites: []],
        page_title: "Sites",
        selected_sites: [],
-       modal: false
+       modal: false,
+       alert: false
      )}
   end
 
@@ -59,6 +60,7 @@ defmodule DemoWeb.SitesLive do
   """
   @impl true
   def handle_event("check", %{"id" => selected_id}, socket) do
+    IO.puts("CLICKED")
     %{assigns: %{selected_sites: selected_sites, sites: sites}} = socket
 
     selected_id = String.to_integer(selected_id)
@@ -99,30 +101,51 @@ defmodule DemoWeb.SitesLive do
     {:noreply, socket}
   end
 
-  def handle_event("validate", _, socket) do
-    {:noreply, socket}
-  end
-
   def handle_event("save_edits", form, socket) do
+    #iterate over selected sites, and update
     Enum.each(form, fn {id, changes} ->
       id = String.to_integer(id)
 
       Sites.update_site(id, changes)
     end)
 
-    # get updated sites by sorted params
-    sites = Sites.list_sites(sort: socket.assigns.options)
-
     socket =
       assign(
         socket,
-        # selected_sites: [],
-        modal: false,
-        sites: sites
+        modal: false
       )
 
     {:noreply, socket}
   end
+
+  @doc """
+  Handles a broadcast to PubSub module.
+  """
+  @impl true
+  def handle_info({:site_updated, updated_site}, socket) do
+    # get updated sites by current sort params
+    Process.send_after(self(), :clear_flash, 2000)
+
+    new_sites = Sites.list_sites(sort: socket.assigns.options)
+
+    socket =
+    socket
+    |> update(
+      :sites,
+      fn _sites -> new_sites end
+      )
+      |> put_flash(:info, "#{updated_site.name} updated")
+      |> assign(alert: true)
+
+      IO.inspect(socket, label: "SOCKET")
+      {:noreply, socket}
+  end
+
+  @impl true
+  def handle_info(:clear_flash, socket) do
+    {:noreply, assign(socket, alert: false)}
+  end
+
 
   defp change_weather_text(true), do: "Yes"
   defp change_weather_text(false), do: "No"

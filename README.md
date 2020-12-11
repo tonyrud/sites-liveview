@@ -1,6 +1,12 @@
 # Site Controller Demo
 
-Phoenix LiveView project
+Phoenix LiveView playground
+
+Using
+
+- PubSub for real-time updates
+- PostGIS for point to point location searching
+- Dockerized
 
 ## Start application
 
@@ -37,5 +43,6 @@ Demo.Sites.list_sites
 
 - [ ] Module and function docs
 - [ ] Unit tests
+- [ ] Handle lists flash messages
 - [ ] Modal as a LiveComponent
 - [ ] Uncheck boxes after editing
