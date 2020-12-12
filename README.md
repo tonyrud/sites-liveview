@@ -33,6 +33,12 @@ docker-compose exec phoenix iex -S mix
 Demo.Sites.list_sites
 ```
 
+## Tests
+
+```bash
+MIX_ENV=test mix test
+```
+
 ## Links
 
 [Sites](http://localhost:4000/sites)

@@ -6,7 +6,8 @@ defmodule DemoWeb.HomeLive do
     {:ok,
      assign(
        socket,
-       page_title: "Home"
+       page_title: "Home",
+       alert: false
      )}
   end
 

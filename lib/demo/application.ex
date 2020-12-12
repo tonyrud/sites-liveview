@@ -26,8 +26,8 @@ defmodule Demo.Application do
   end
 
   defp get_repo do
-    case Mix.env() do
-      :test -> []
+    case System.get_env("MIX_ENV") do
+      "test" -> []
       _ -> [Demo.Repo]
     end
   end

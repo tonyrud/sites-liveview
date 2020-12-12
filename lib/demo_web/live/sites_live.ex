@@ -60,7 +60,6 @@ defmodule DemoWeb.SitesLive do
   """
   @impl true
   def handle_event("check", %{"id" => selected_id}, socket) do
-    IO.puts("CLICKED")
     %{assigns: %{selected_sites: selected_sites, sites: sites}} = socket
 
     selected_id = String.to_integer(selected_id)
