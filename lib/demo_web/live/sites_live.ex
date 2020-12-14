@@ -136,7 +136,6 @@ defmodule DemoWeb.SitesLive do
       |> put_flash(:info, "#{updated_site.name} updated")
       |> assign(alert: true)
 
-    IO.inspect(socket, label: "SOCKET")
     {:noreply, socket}
   end
 

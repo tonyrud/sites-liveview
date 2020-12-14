@@ -1,6 +1,5 @@
 use Mix.Config
 
-
 # Configure your database
 config :demo, Demo.Repo,
   username: System.get_env("POSTGRES_USER", "postgres"),

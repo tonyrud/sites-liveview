@@ -6,7 +6,7 @@ alias Demo.{
 }
 
 Ecto.Migrator.with_repo(Repo, fn _repo ->
-  directory = Application.app_dir(:demo, "priv/repo")
+  directory = Application.app_dir(:demo, "priv/repo/seeds")
 
   sites = fn ->
     filepath = Path.join(directory, "ExampleSitesData.csv")
@@ -34,7 +34,6 @@ Ecto.Migrator.with_repo(Repo, fn _repo ->
 
     File.stream!(filepath)
     |> CSV.decode!(headers: true)
-    |> IO.inspect()
     |> Enum.each(fn item ->
       controller = %Controller{
         id: String.to_integer(item["Controller ID"]),

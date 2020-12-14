@@ -23,7 +23,6 @@ defmodule DemoWeb.GeoLocationsLive do
 
   @impl true
   def handle_params(params, _url, socket) do
-
     distance = params["distance"] || "0"
     search_type = params["search_type"] || "zip_code"
     site_id = params["site_id"]
