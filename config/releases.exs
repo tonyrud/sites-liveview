@@ -24,7 +24,15 @@ secret_key_base =
     You can generate one by calling: mix phx.gen.secret
     """
 
+host =
+  System.get_env("HOST") ||
+    raise """
+    environment variable HOST is missing.
+    """
+
 config :demo, DemoWeb.Endpoint,
+  url: [host: host],
+
   http: [
     port: String.to_integer(System.get_env("PORT") || "4000"),
     transport_options: [socket_opts: [:inet6]]
