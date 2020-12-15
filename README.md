@@ -8,7 +8,7 @@ Using
 - PostGIS for point to point location searching
 - Dockerized local development
 - GH Actions for CI on PRs
-- Dockerized released and deployed via ECS
+- Dockerized releases and deployed via ECS
 
 ## Start application
 
