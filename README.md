@@ -6,7 +6,9 @@ Using
 
 - PubSub for real-time updates
 - PostGIS for point to point location searching
-- Dockerized
+- Dockerized local development
+- GH Actions for CI on PRs
+- Dockerized released and deployed via ECS
 
 ## Start application
 
@@ -49,7 +51,7 @@ MIX_ENV=test mix test
 
 - [ ] Module and function docs
 - [ ] Unit tests
-- [ ] Handle lists flash messages
+- [ ] Handle lists of flash messages when editing/creating
 - [ ] Modal as a LiveComponent
 - [ ] Uncheck boxes after editing
-- [ ] Add ci: credo, dialyxer, formatting
+- [ ] Add ci: credo, dialyxer, ~formatting~
