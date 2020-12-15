@@ -17,7 +17,7 @@ if [ -z  $GET_DB ]
 then
   echo "Database $POSTGRES_DB does not exist. Creating..."
   
-  mix ecto.setup
+  mix ecto.setup.dev
 else
   echo "Database $POSTGRES_DB has already been created. Running migrations..."
 
