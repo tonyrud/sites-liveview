@@ -19,6 +19,15 @@ defmodule Demo.Sites do
                      }
                    )
 
+  @doc """
+  Create a Site.
+  """
+  def create_site(attributes) do
+    %Site{}
+    |> Site.create_changeset(attributes)
+    |> @repo.insert!()
+  end
+
   def list_sites do
     @repo.all(@base_list_query)
   end

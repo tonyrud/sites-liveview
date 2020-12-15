@@ -44,6 +44,14 @@ defmodule Demo.TestRepo do
     {:error, changeset}
   end
 
+  def insert!(%Changeset{errors: [], changes: values}) do
+    {:ok, struct(Site, values)}
+  end
+
+  def insert!(changeset) do
+    {:error, changeset}
+  end
+
   def transaction(_fn) do
     {:ok,
      %Site{
