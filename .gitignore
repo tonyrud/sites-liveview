@@ -36,3 +36,5 @@ npm-debug.log
 /priv/static/
 
 .iex.exs
+
+**/.DS_Store

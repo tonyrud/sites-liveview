@@ -1,5 +1,10 @@
 <section>
-  <h1 class="h1">All Sites</h1>
+  <div class="flex justify-between items-center">
+    <h1 class="h1">
+      All Sites
+    </h1>
+    <%= live_redirect "Create New Site", to: Routes.live_path(@socket, DemoWeb.SitesCreateLive) %>
+  </div>
 
   <button
     class="btn bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
@@ -31,7 +36,7 @@
     </thead>
 
 
-      <tbody id="sites" phx-update="prepend" >
+      <tbody id="sites">
       <%= for site <- @sites do %>
         <tr id="<%= site.id %>" >
           <td style="position: relative;">

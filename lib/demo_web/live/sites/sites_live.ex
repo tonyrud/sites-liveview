@@ -18,6 +18,7 @@ defmodule DemoWeb.SitesLive do
      )}
   end
 
+  # Handle route path changes.
   @impl true
   def handle_params(params, _url, socket) do
     sort_by = (params["sort_by"] || "id") |> String.to_atom()
@@ -34,11 +35,22 @@ defmodule DemoWeb.SitesLive do
     {:noreply, socket}
   end
 
+  # Handle input filtering for sites
   @impl true
   def handle_event("filter", %{"filter" => filter}, socket) do
     params = [filter: %{filter: filter}]
 
-    socket = assign(socket, params ++ [sites: Sites.list_sites(params)])
+    new_sites = Sites.list_sites(params)
+
+    socket =
+      update(
+        socket,
+        :sites,
+        fn _sites -> new_sites end
+      )
+
+    IO.inspect(socket, label: "SOCKET")
+
     {:noreply, socket}
   end
 
@@ -52,12 +64,9 @@ defmodule DemoWeb.SitesLive do
     {:noreply, socket}
   end
 
-  @doc """
-  Handles the click events for editing. Receives the %Site{} id and selects if it's not currently select,
-  and deselects if it is.
-
-  The id will be a string in html, and needs to be converted to an integer for correct comparison.
-  """
+  # Handles the click events for editing. Receives the %Site{} id and selects if it's not currently select,
+  # and deselects if it is.
+  # The id will be a string in html, and needs to be converted to an integer for correct comparison.
   @impl true
   def handle_event("check", %{"id" => selected_id}, socket) do
     %{assigns: %{selected_sites: selected_sites, sites: sites}} = socket
@@ -117,14 +126,13 @@ defmodule DemoWeb.SitesLive do
     {:noreply, socket}
   end
 
-  @doc """
-  Handles a broadcast to PubSub module.
-  """
+  # Handles a broadcast to PubSub module.
   @impl true
   def handle_info({:site_updated, updated_site}, socket) do
-    # get updated sites by current sort params
+    # close flash after count
     Process.send_after(self(), :clear_flash, 2000)
 
+    # get updated sites by current sort params
     new_sites = Sites.list_sites(sort: socket.assigns.options)
 
     socket =
