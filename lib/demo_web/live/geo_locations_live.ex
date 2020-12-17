@@ -47,7 +47,6 @@ defmodule DemoWeb.GeoLocationsLive do
         sites: sites_in_radius,
         form_model: form_model
       )
-      |> IO.inspect()
 
     {:noreply, socket}
   end

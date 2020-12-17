@@ -49,8 +49,6 @@ defmodule DemoWeb.SitesLive do
         fn _sites -> new_sites end
       )
 
-    IO.inspect(socket, label: "SOCKET")
-
     {:noreply, socket}
   end
 
@@ -192,5 +190,9 @@ defmodule DemoWeb.SitesLive do
     if has_weather_station == option_name do
       "selected"
     end
+  end
+
+  defp format_date(date) do
+    Calendar.strftime(date, "%a, %b %d %Y")
   end
 end

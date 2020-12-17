@@ -1,0 +1,22 @@
+form {
+  .field {
+    margin-bottom: 2rem;
+  }
+
+  .input-row {
+    display: flex;
+
+    .field {
+      flex: 1;
+
+      &:first-child {
+        padding-right: 3rem;
+      }
+    }
+  }
+
+  select {
+    width: 100%;
+    padding-left: 1rem;
+  }
+}

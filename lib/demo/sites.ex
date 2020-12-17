@@ -25,7 +25,8 @@ defmodule Demo.Sites do
   def create_site(attributes) do
     %Site{}
     |> Site.create_changeset(attributes)
-    |> @repo.insert!()
+    |> IO.inspect(label: "CHANGES")
+    |> @repo.insert()
   end
 
   def list_sites do
@@ -101,6 +102,4 @@ defmodule Demo.Sites do
       {event, updated_site}
     )
   end
-
-  # def broadcast({:error, _reason} = error, _event), do: error
 end

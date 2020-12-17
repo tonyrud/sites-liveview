@@ -1,0 +1,56 @@
+<section>
+  <h1 class="h1">Create Site</h1>
+  <%= f = form_for @changeset, "#",
+              phx_submit: "save" %>
+
+    <div class="field">
+      <%= text_input f, :name,
+                    placeholder: "Site Name",
+                    autocomplete: "off",
+                    phx_debounce: "2000" %>
+      <%= error_tag f, :name %>
+    </div>
+
+    <div class="field">
+      <%= text_input f, :address,
+                          placeholder: "Address",
+                          autocomplete: "off",
+                          phx_debounce: "blur" %>
+      <%= error_tag f, :address %>
+    </div>
+
+    <div class="field">
+      <%= label(f, :billing_status, "Billing Status") %>
+      <%= select(f, :billing_status, [[key: "Paid", value: "paid"], [key: "Unpaid", value: "unpaid"] ]) %>
+    </div>
+
+    <div class="field">
+      <%= label(f, :has_weather_station, "Has Weather Station") %>
+      <%= select(f, :has_weather_station, [[key: "Yes", value: "true"], [key: "No", value: "false"] ]) %>
+    </div>
+
+    <div class="input-row">
+      <div class="field">
+        <%= label(f, :latitude, "Latitude") %>
+        <%= number_input(f, :latitude,
+          step: "any",
+          placeholder: "Latitude location (ex: -68.342)",
+          autocomplete: "off") %>
+        <%= error_tag f, :latitude %>
+
+      </div>
+
+      <div class="field">
+        <%= label(f, :longitude, "Longitude") %>
+        <%= number_input(f, :longitude,
+        placeholder: "Longitude location (ex: 133.88)",
+        step: "any",
+        autocomplete: "off") %>
+        <%= error_tag f, :longitude %>
+      </div>
+    </div>
+
+
+    <%= submit "Create Site", phx_disable_with: "Saving...", class: "bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded" %>
+  </form>
+</section>

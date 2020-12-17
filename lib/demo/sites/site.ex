@@ -43,16 +43,20 @@ defmodule Demo.Sites.Site do
   end
 
   defp validate_lat_lng(changeset, attributes) do
-    lat = Map.get(attributes, :lat)
-    lng = Map.get(attributes, :lng)
+    lat = Map.get(attributes, "latitude")
+    lng = Map.get(attributes, "longitude")
 
     lat_range = %{high: 90, low: -90}
     lng_range = %{high: 180, low: -180}
 
-    in_lat_ranges = lat < lat_range.high and lat > lat_range.low
-    in_lng_ranges = lng < lng_range.high and lng > lng_range.low
+    # make sure lat/lng are not nil or empty strings
+    if lat not in ["", nil] and lng not in ["", nil] do
+      lat = to_float(lat)
+      lng = to_float(lng)
 
-    if lat != nil and lng != nil do
+      in_lat_ranges = lat < lat_range.high and lat > lat_range.low
+      in_lng_ranges = lng < lng_range.high and lng > lng_range.low
+
       if in_lat_ranges and in_lng_ranges do
         point = %Geo.Point{coordinates: {lng, lat}, srid: 4326}
         put_change(changeset, :lng_lat_point, point)
@@ -64,6 +68,17 @@ defmodule Demo.Sites.Site do
     else
       changeset
     end
+  end
+
+  defp to_float(string) do
+    string =
+      if String.contains?(string, ".") do
+        string
+      else
+        string <> ".0"
+      end
+
+    String.to_float(string)
   end
 
   defp check_range(changeset, val, key, %{high: h, low: l}) when val > h or val < l do
