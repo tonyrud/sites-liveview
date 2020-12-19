@@ -1,4 +1,5 @@
 defmodule DemoWeb.HomeLive do
+  @moduledoc false
   use DemoWeb, :live_view
 
   @impl true

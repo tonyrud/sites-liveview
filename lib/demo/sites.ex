@@ -25,7 +25,6 @@ defmodule Demo.Sites do
   def create_site(attributes) do
     %Site{}
     |> Site.create_changeset(attributes)
-    |> IO.inspect(label: "CHANGES")
     |> Repo.insert()
   end
 
@@ -33,7 +32,7 @@ defmodule Demo.Sites do
     Repo.all(@base_list_query)
   end
 
-  def subscribe() do
+  def subscribe do
     Phoenix.PubSub.subscribe(Demo.PubSub, @sites_subscription_channel)
   end
 
@@ -47,7 +46,8 @@ defmodule Demo.Sites do
   ]
   """
   def list_sites(params) when is_list(params) do
-    Enum.reduce(params, @base_list_query, fn
+    params
+    |> Enum.reduce(@base_list_query, fn
       {:filter, %{filter: ""}}, query ->
         from q in query, order_by: [{:asc, :id}]
 

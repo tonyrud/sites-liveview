@@ -50,7 +50,7 @@ defmodule Demo.MixProject do
       {:plug_cowboy, "~> 2.0"},
       {:telemetry_metrics, "~> 0.4"},
       {:telemetry_poller, "~> 0.4"},
-      {:dialyxir, "~> 1.0", only: [:dev], runtime: false},
+      {:dialyxir, "~> 1.0", only: [:dev, :test], runtime: false},
       {:credo, "~> 1.5", only: [:dev, :test], runtime: false}
     ]
   end
@@ -67,7 +67,8 @@ defmodule Demo.MixProject do
       "ecto.setup": ["ecto.create", "ecto.migrate"],
       "ecto.setup.dev": ["ecto.setup", "run priv/repo/seeds/seeds.exs"],
       "ecto.reset": ["ecto.drop", "ecto.setup"],
-      "ecto.reset.dev": ["ecto.drop", "ecto.setup.dev"]
+      "ecto.reset.dev": ["ecto.drop", "ecto.setup.dev"],
+      test: ["ecto.create --quiet", "ecto.migrate", "test"]
     ]
   end
 

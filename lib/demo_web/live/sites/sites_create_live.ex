@@ -1,9 +1,12 @@
 defmodule DemoWeb.SitesCreateLive do
+  @moduledoc """
+  LV for create new Sites
+  """
   use DemoWeb, :live_view
 
   alias Demo.{
-    Sites.Site,
-    Sites
+    Sites,
+    Sites.Site
   }
 
   @impl true
@@ -21,8 +24,6 @@ defmodule DemoWeb.SitesCreateLive do
 
   @impl true
   def handle_event("save", %{"site" => form_params}, socket) do
-    IO.inspect(form_params, label: "FORM")
-
     case Sites.create_site(form_params) do
       {:ok, _site} ->
         # changeset = Site.create_changeset(%Site{})
@@ -31,13 +32,14 @@ defmodule DemoWeb.SitesCreateLive do
 
         # {:noreply, socket}
 
-        push_patch(socket,
-          to:
-            Routes.live_path(
-              socket,
-              DemoWeb.SitesLive
-            )
-        )
+        {:noreply,
+         push_redirect(socket,
+           to:
+             Routes.live_path(
+               socket,
+               DemoWeb.SitesLive
+             )
+         )}
 
       {:error, %Ecto.Changeset{} = changeset} ->
         socket = assign(socket, changeset: changeset)

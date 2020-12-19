@@ -1,4 +1,7 @@
 defmodule Demo.ZipCodes do
+  @moduledoc """
+  Demo.ZipCodes.ZipCode context module
+  """
   alias Demo.{
     Repo,
     Sites.Site,
@@ -7,15 +10,15 @@ defmodule Demo.ZipCodes do
 
   @miles_meters 1609.344
 
-  defp sites_target_cte() do
+  defp sites_target_cte do
     "WITH target AS (SELECT lng_lat_point FROM sites WHERE id = $1::numeric)"
   end
 
-  defp zipcode_target_cte() do
+  defp zipcode_target_cte do
     "WITH target AS (SELECT lng_lat_point FROM zip_codes WHERE zip_code = $1::varchar)"
   end
 
-  defp base_geo_query() do
+  defp base_geo_query do
     """
     SELECT
         s.id,

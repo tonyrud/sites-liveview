@@ -1,4 +1,7 @@
 defmodule DemoWeb.SitesLive do
+  @moduledoc """
+  LV module for Sites page
+  """
   use DemoWeb, :live_view
 
   alias Demo.Sites

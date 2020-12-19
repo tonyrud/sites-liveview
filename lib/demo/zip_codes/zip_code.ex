@@ -1,4 +1,7 @@
 defmodule Demo.ZipCodes.ZipCode do
+  @moduledoc """
+  ZipCode schema
+  """
   use Ecto.Schema
 
   import Ecto.Changeset
@@ -10,7 +13,7 @@ defmodule Demo.ZipCodes.ZipCode do
     field :lng_lat_point, Geo.PostGIS.Geometry
   end
 
-  def create_changeset(%__Module__{} = zip_code, attrs \\ %{}) do
+  def create_changeset(%Demo.ZipCodes.ZipCode{} = zip_code, attrs \\ %{}) do
     all_fields = [:zip_code, :city, :state, :lng_lat_point]
 
     zip_code

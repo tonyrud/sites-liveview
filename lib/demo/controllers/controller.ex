@@ -1,4 +1,7 @@
 defmodule Demo.Controllers.Controller do
+  @moduledoc """
+  controllers schema
+  """
   use Ecto.Schema
 
   schema "controllers" do

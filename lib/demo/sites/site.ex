@@ -1,4 +1,7 @@
 defmodule Demo.Sites.Site do
+  @moduledoc """
+  Site schema
+  """
   use Ecto.Schema
 
   import Ecto.Changeset
@@ -29,7 +32,7 @@ defmodule Demo.Sites.Site do
     timestamps()
   end
 
-  def create_changeset(%__MODULE__{} = site, attributes \\ %{}) do
+  def create_changeset(%Demo.Sites.Site{} = site, attributes \\ %{}) do
     site
     |> cast(attributes, @required_fields ++ @optional_fields)
     |> validate_required(@required_fields)
