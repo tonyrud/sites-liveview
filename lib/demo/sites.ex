@@ -4,10 +4,10 @@ defmodule Demo.Sites do
   """
   import Ecto.Query
 
-  @repo Application.get_env(:demo, :repo)
   @sites_subscription_channel inspect(__MODULE__)
 
   alias Demo.{
+    Repo,
     Sites.Site
   }
 
@@ -26,11 +26,11 @@ defmodule Demo.Sites do
     %Site{}
     |> Site.create_changeset(attributes)
     |> IO.inspect(label: "CHANGES")
-    |> @repo.insert()
+    |> Repo.insert()
   end
 
   def list_sites do
-    @repo.all(@base_list_query)
+    Repo.all(@base_list_query)
   end
 
   def subscribe() do
@@ -61,7 +61,7 @@ defmodule Demo.Sites do
       {:sort, %{sort_by: sort_by, sort_order: sort_order}}, query ->
         from q in query, order_by: [{^sort_order, ^sort_by}]
     end)
-    |> @repo.all()
+    |> Repo.all()
   end
 
   def get_site(site_id) do
@@ -69,7 +69,7 @@ defmodule Demo.Sites do
       from site in Site,
         where: site.id == ^site_id
 
-    case @repo.one(query) do
+    case Repo.one(query) do
       %Site{} = site ->
         {:ok, site}
 
@@ -80,12 +80,12 @@ defmodule Demo.Sites do
 
   def update_site(site_id, params) do
     {_transaction_result, update_result} =
-      @repo.transaction(fn ->
+      Repo.transaction(fn ->
         case get_site(site_id) do
           {:ok, %Site{} = site} ->
             site
             |> Site.update_changeset(params)
-            |> @repo.update!()
+            |> Repo.update!()
 
           {:error, _reason} = error ->
             error
