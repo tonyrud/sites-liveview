@@ -186,10 +186,13 @@ defmodule DemoWeb.SitesLive do
     end
   end
 
+  @spec selected_billing_status(map, binary) :: nil | binary
   defp selected_has_weather_station(%{has_weather_station: has_weather_station}, option_name) do
     if has_weather_station == option_name do
       "selected"
     end
+
+    true
   end
 
   defp format_date(date) do

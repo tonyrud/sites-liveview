@@ -25,11 +25,19 @@ defmodule DemoWeb.SitesCreateLive do
 
     case Sites.create_site(form_params) do
       {:ok, _site} ->
-        changeset = Site.create_changeset(%Site{})
+        # changeset = Site.create_changeset(%Site{})
 
-        socket = assign(socket, changeset: changeset)
+        # socket = assign(socket, changeset: changeset)
 
-        {:noreply, socket}
+        # {:noreply, socket}
+
+        push_patch(socket,
+          to:
+            Routes.live_path(
+              socket,
+              DemoWeb.SitesLive
+            )
+        )
 
       {:error, %Ecto.Changeset{} = changeset} ->
         socket = assign(socket, changeset: changeset)

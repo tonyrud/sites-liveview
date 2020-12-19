@@ -38,3 +38,6 @@ npm-debug.log
 .iex.exs
 
 **/.DS_Store
+
+/priv/plts/*.plt
+/priv/plts/*.plt.hash

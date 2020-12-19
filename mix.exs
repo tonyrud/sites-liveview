@@ -10,7 +10,8 @@ defmodule Demo.MixProject do
       compilers: [:phoenix, :gettext] ++ Mix.compilers(),
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
-      deps: deps()
+      deps: deps(),
+      dialyzer: dialyzer()
     ]
   end
 
@@ -48,7 +49,9 @@ defmodule Demo.MixProject do
       {:phoenix_live_dashboard, "~> 0.3 or ~> 0.2.9"},
       {:plug_cowboy, "~> 2.0"},
       {:telemetry_metrics, "~> 0.4"},
-      {:telemetry_poller, "~> 0.4"}
+      {:telemetry_poller, "~> 0.4"},
+      {:dialyxir, "~> 1.0", only: [:dev], runtime: false},
+      {:credo, "~> 1.5", only: [:dev, :test], runtime: false}
     ]
   end
 
@@ -65,6 +68,13 @@ defmodule Demo.MixProject do
       "ecto.setup.dev": ["ecto.setup", "run priv/repo/seeds.exs"],
       "ecto.reset": ["ecto.drop", "ecto.setup"],
       "ecto.reset.dev": ["ecto.drop", "ecto.setup.dev"]
+    ]
+  end
+
+  defp dialyzer do
+    [
+      plt_core_path: "priv/plts",
+      plt_file: {:no_warn, "priv/plts/dialyzer.plt"}
     ]
   end
 end
