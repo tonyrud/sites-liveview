@@ -37,8 +37,10 @@ Demo.Sites.list_sites
 
 ## Tests
 
+Note: testing config runs against Docker db port by default
+
 ```bash
-MIX_ENV=test mix test
+mix test
 ```
 
 ## Links

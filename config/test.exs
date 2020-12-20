@@ -13,6 +13,7 @@ config :demo, Demo.Repo,
   hostname: System.get_env("POSTGRES_HOST", "localhost"),
   port: String.to_integer(System.get_env("POSTGRES_PORT", "54322")),
   pool: Ecto.Adapters.SQL.Sandbox,
+  pool_size: 25,
   show_sensitive_data_on_connection_error: true,
   types: Demo.PostgresTypes
 

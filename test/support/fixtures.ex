@@ -4,11 +4,11 @@ defmodule Demo.Test.Fixtures do
     Sites.Site
   }
 
-  def make_many(count, schema, p \\ %{}), do: for(_ <- 1..count, do: make(schema, p))
+  def make_many(count, schema), do: for(_ <- 1..count, do: make(schema))
 
   def make(:site) do
     site = %Site{
-      id: "1234",
+      id: Enum.random(1..999),
       name: "Site Name",
       address: "Address",
       billing_status: :paid,

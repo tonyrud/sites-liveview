@@ -24,7 +24,7 @@ defmodule Demo.DataCase do
       import Ecto.Changeset
       import Ecto.Query
       import Demo.DataCase
-      # import Demo.Test.Fixtures
+      import Demo.Test.Fixtures
     end
   end
 

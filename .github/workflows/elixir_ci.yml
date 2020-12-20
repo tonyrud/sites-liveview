@@ -45,11 +45,12 @@ jobs:
       # - name: Run Credo
       #   run: mix credo --strict
 
-      # - name: Run tests
-      #    env:
-      #      POSTGRES_HOST: ${{ secrets.POSTGRES_HOST }}
-      #      POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
-      #    run: mix test
+      - name: Run tests
+        env:
+          POSTGRES_HOST: ${{ secrets.POSTGRES_HOST }}
+          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+          POSTGRES_PORT: 5432
+        run: mix test
 
       - name: Check for PLT Cache
         uses: actions/cache@v1
