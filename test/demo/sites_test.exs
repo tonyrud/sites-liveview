@@ -1,8 +1,12 @@
 defmodule Demo.SitesTest do
   use ExUnit.Case
+  # use Demo.DataCase
+  # import Demo.Test.Fixtures
 
-  alias Demo.Sites
-  alias Demo.Sites.Site
+  alias Demo.{
+    Sites,
+    Sites.Site
+  }
 
   test "list_sites/0 should return %Site{}" do
     sites = Sites.list_sites()
@@ -11,6 +15,7 @@ defmodule Demo.SitesTest do
   end
 
   test "list_sites/0 should return 3 items" do
+    make_many(4, :sites)
     sites = Sites.list_sites()
 
     assert length(sites) === 3
