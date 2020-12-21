@@ -1,4 +1,6 @@
 defmodule Demo.Test.Fixtures do
+  @moduledoc false
+
   alias Demo.{
     Repo,
     Sites.Site
