@@ -10,9 +10,30 @@ env:
   MIX_ENV: test
 
 jobs:
-  build:
+  runner-job:
     name: Build and test
-    runs-on: ubuntu-latest
+    runs-on:
+      ubuntu-latest
+
+      # Service containers to run with `runner-job`
+    services:
+      # Label used to access the service container
+      postgres:
+        # Docker Hub image
+        image: postgis/postgis:10-2.5-alpine
+        # Provide the password for postgres
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+        # Set health checks to wait until postgres has started
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          # Maps tcp port 5432 on service container to the host
+          - 5432:5432
 
     steps:
       - uses: actions/checkout@v2
@@ -47,8 +68,6 @@ jobs:
 
       - name: Run tests
         env:
-          POSTGRES_HOST: ${{ secrets.POSTGRES_HOST }}
-          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
           POSTGRES_PORT: 5432
         run: mix test
 
