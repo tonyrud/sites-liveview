@@ -22,6 +22,8 @@ phases:
       - echo pushing to repo
       - docker push $REPOSITORY_URI:latest
       - docker push $REPOSITORY_URI:$IMAGE_TAG
+      - echo Running pre_start script
+      - sh pre_start.sh
       - echo Writing image definitions file...
       - printf '[{"name":"sites-lv-release","imageUri":"%s"}]' $REPOSITORY_URI:$IMAGE_TAG > imagedefinitions.json
 artifacts:
