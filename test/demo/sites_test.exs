@@ -1,16 +1,10 @@
 defmodule Demo.SitesTest do
-  use ExUnit.Case
+  use Demo.DataCase
 
   alias Demo.Sites
-  alias Demo.Sites.Site
-
-  test "list_sites/0 should return %Site{}" do
-    sites = Sites.list_sites()
-
-    assert %Site{name: "Site 2"} === Enum.at(sites, 1)
-  end
 
   test "list_sites/0 should return 3 items" do
+    make_many(3, :site)
     sites = Sites.list_sites()
 
     assert length(sites) === 3

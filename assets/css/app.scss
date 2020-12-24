@@ -1,5 +1,6 @@
 /* This file is for your main application css. */
 @import './phoenix.css';
+@import './forms.scss';
 @import '../node_modules/nprogress/nprogress.css';
 
 .h1 {
@@ -7,6 +8,10 @@
   font-size: 2rem;
   margin: 1rem 0;
   color: #333;
+}
+
+a.active {
+  color: #a94442;
 }
 
 /* LiveView specific classes for your customizations */
@@ -112,7 +117,6 @@
 .invalid-feedback {
   color: #a94442;
   display: block;
-  margin: -1rem 0 2rem;
 }
 
 // modal styles

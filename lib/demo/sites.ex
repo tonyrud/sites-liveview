@@ -4,10 +4,10 @@ defmodule Demo.Sites do
   """
   import Ecto.Query
 
-  @repo Application.get_env(:demo, :repo)
   @sites_subscription_channel inspect(__MODULE__)
 
   alias Demo.{
+    Repo,
     Sites.Site
   }
 
@@ -19,11 +19,20 @@ defmodule Demo.Sites do
                      }
                    )
 
-  def list_sites do
-    @repo.all(@base_list_query)
+  @doc """
+  Create a Site.
+  """
+  def create_site(attributes) do
+    %Site{}
+    |> Site.create_changeset(attributes)
+    |> Repo.insert()
   end
 
-  def subscribe() do
+  def list_sites do
+    Repo.all(@base_list_query)
+  end
+
+  def subscribe do
     Phoenix.PubSub.subscribe(Demo.PubSub, @sites_subscription_channel)
   end
 
@@ -37,7 +46,8 @@ defmodule Demo.Sites do
   ]
   """
   def list_sites(params) when is_list(params) do
-    Enum.reduce(params, @base_list_query, fn
+    params
+    |> Enum.reduce(@base_list_query, fn
       {:filter, %{filter: ""}}, query ->
         from q in query, order_by: [{:asc, :id}]
 
@@ -51,7 +61,7 @@ defmodule Demo.Sites do
       {:sort, %{sort_by: sort_by, sort_order: sort_order}}, query ->
         from q in query, order_by: [{^sort_order, ^sort_by}]
     end)
-    |> @repo.all()
+    |> Repo.all()
   end
 
   def get_site(site_id) do
@@ -59,7 +69,7 @@ defmodule Demo.Sites do
       from site in Site,
         where: site.id == ^site_id
 
-    case @repo.one(query) do
+    case Repo.one(query) do
       %Site{} = site ->
         {:ok, site}
 
@@ -70,12 +80,12 @@ defmodule Demo.Sites do
 
   def update_site(site_id, params) do
     {_transaction_result, update_result} =
-      @repo.transaction(fn ->
+      Repo.transaction(fn ->
         case get_site(site_id) do
           {:ok, %Site{} = site} ->
             site
             |> Site.update_changeset(params)
-            |> @repo.update!()
+            |> Repo.update!()
 
           {:error, _reason} = error ->
             error
@@ -92,6 +102,4 @@ defmodule Demo.Sites do
       {event, updated_site}
     )
   end
-
-  # def broadcast({:error, _reason} = error, _event), do: error
 end

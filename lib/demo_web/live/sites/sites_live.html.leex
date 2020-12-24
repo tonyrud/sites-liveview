@@ -1,5 +1,10 @@
 <section>
-  <h1 class="h1">All Sites</h1>
+  <div class="flex justify-between items-center">
+    <h1 class="h1">
+      All Sites
+    </h1>
+    <%= live_redirect "Create New Site", to: Routes.live_path(@socket, DemoWeb.SitesCreateLive) %>
+  </div>
 
   <button
     class="btn bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
@@ -19,19 +24,18 @@
     <thead>
       <tr>
         <th class="px-4 py-2">Edit</th>
-        <th class="px-4 py-2">
-          <%= sort_link(@socket, "Site Id", :id, @options) %>
-        </th>
         <th class="px-4 py-2"><%= sort_link(@socket, "Name", :name, @options) %></th>
         <th class="px-4 py-2"><%= sort_link(@socket, "Address", :address, @options) %></th>
         <th class="px-4 py-2"><%= sort_link(@socket, "Billing Status", :billing_status, @options) %></th>
         <th class="px-4 py-2"><%= sort_link(@socket, "Has Weather Station", :has_weather_station, @options) %></th>
         <th class="px-4 py-2"><%= sort_link(@socket, "Controller Count", :controllers_count, @options) %></th>
+        <th class="px-4 py-2"><%= sort_link(@socket, "Created", :inserted_at, @options) %></th>
+        <th class="px-4 py-2"><%= sort_link(@socket, "Last Updated", :updated_at, @options) %></th>
       </tr>
     </thead>
 
 
-      <tbody id="sites" phx-update="prepend" >
+      <tbody id="sites">
       <%= for site <- @sites do %>
         <tr id="<%= site.id %>" >
           <td style="position: relative;">
@@ -43,12 +47,13 @@
               class="mr-2 leading-tight"
               type="checkbox">
           </td>
-          <td class="border px-5 py-4"><%= site.id %></td>
           <td class="border px-5 py-4"><%= site.name %></td>
           <td class="border px-5 py-4"><%= site.address %></td>
           <td class="border px-5 py-4"><%= site.billing_status %></td>
           <td class="border px-5 py-4"><%= change_weather_text(site.has_weather_station) %></td>
           <td class="border px-5 py-4"><%= site.controllers_count %></td>
+          <td class="border px-5 py-4"><%= format_date(site.inserted_at) %></td>
+          <td class="border px-5 py-4"><%= format_date(site.updated_at) %></td>
         </tr>
       <% end %>
       </tbody>

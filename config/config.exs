@@ -10,9 +10,6 @@ use Mix.Config
 config :demo,
   ecto_repos: [Demo.Repo]
 
-# This is set so we can swap for stubbed Repo in tests
-config :demo, repo: Demo.Repo
-
 # Configures the endpoint
 config :demo, DemoWeb.Endpoint,
   url: [host: "localhost"],

@@ -7,8 +7,13 @@ defmodule Demo.Release do
 
   @app :demo
 
-  def migrate do
+  def setup do
     load_app()
+    migrate()
+  end
+
+  defp migrate do
+    IO.puts("Running migrations")
 
     for repo <- repos() do
       {:ok, _, _} = Ecto.Migrator.with_repo(repo, &Ecto.Migrator.run(&1, :up, all: true))

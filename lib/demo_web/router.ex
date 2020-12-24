@@ -19,6 +19,7 @@ defmodule DemoWeb.Router do
 
     live "/", HomeLive
     live "/sites", SitesLive
+    live "/sites/create", SitesCreateLive
     live "/sites/distance-search", GeoLocationsLive
   end
 

@@ -9,7 +9,7 @@ services:
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: demo_dev
+      POSTGRES_DB: sites_dev
       POSTGRES_PORT: 54322
       POSTGRES_HOST: host.docker.internal
       ERL_AFLAGS: -kernel shell_history enabled
