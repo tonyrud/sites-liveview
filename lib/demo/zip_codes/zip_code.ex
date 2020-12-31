@@ -1,6 +1,6 @@
 defmodule Demo.ZipCodes.ZipCode do
   @moduledoc """
-  ZipCode schema
+  Ecto schema for zip codes. Zip codes have a Geo point in PostGIS, allowing a point-to-point radius search for `Demo.Sites.Site` schema
   """
   use Ecto.Schema
 

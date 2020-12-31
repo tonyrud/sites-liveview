@@ -73,6 +73,7 @@ defmodule Demo.Sites.Site do
     end
   end
 
+  # Takes an integer or float string and returns an actual float.
   defp to_float(string) do
     string =
       if String.contains?(string, ".") do
@@ -84,6 +85,8 @@ defmodule Demo.Sites.Site do
     String.to_float(string)
   end
 
+  # Adds an error to changeset if the value is not in the high/low range.
+  @spec check_range(%Ecto.Changeset{}, float(), atom(), map()) :: %Ecto.Changeset{}
   defp check_range(changeset, val, key, %{high: h, low: l}) when val > h or val < l do
     add_error(
       changeset,

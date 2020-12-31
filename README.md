@@ -56,4 +56,4 @@ mix test
 - [ ] Handle lists of flash messages when editing/creating
 - [ ] Modal as a LiveComponent
 - [ ] Uncheck boxes after editing
-- [ ] Add ci: credo, dialyxer, ~formatting~
+- [ x ] Add ci: credo, dialyxer, formatting
