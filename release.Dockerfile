@@ -1,7 +1,7 @@
 FROM elixir:1.11-alpine AS build
 
 # install build dependencies
-RUN apk add --no-cache build-base npm git python3
+RUN apk add --no-cache build-base npm git python3 erlang-observer
 
 # prepare build dir
 WORKDIR /app

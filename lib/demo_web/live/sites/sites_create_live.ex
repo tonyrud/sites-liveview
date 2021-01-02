@@ -31,12 +31,6 @@ defmodule DemoWeb.SitesCreateLive do
   def handle_event("save", %{"site" => form_params}, socket) do
     case Sites.create_site(form_params) do
       {:ok, _site} ->
-        # changeset = Site.create_changeset(%Site{})
-
-        # socket = assign(socket, changeset: changeset)
-
-        # {:noreply, socket}
-
         {:noreply,
          push_redirect(socket,
            to:

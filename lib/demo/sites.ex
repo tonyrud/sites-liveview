@@ -1,17 +1,8 @@
 defmodule Demo.Sites do
   @moduledoc """
-  Context module for Sites
+  Context module for `Demo.Sites.Site`
   """
   import Ecto.Query
-
-  @type form_attributes :: %{
-          address: binary(),
-          billing_status: binary(),
-          has_weather_station: binary(),
-          latitude: binary(),
-          longitude: binary(),
-          abc: binary()
-        }
 
   @sites_subscription_channel inspect(__MODULE__)
 
@@ -30,11 +21,8 @@ defmodule Demo.Sites do
 
   @doc """
   Create a new `Demo.Sites.Site`.
-
-  Takes form input map with shape
-
   """
-  @spec create_site(form_attributes()) :: {:ok, Site} | {:error, %Ecto.Changeset{}}
+  @spec create_site(map()) :: {:ok, Site} | {:error, %Ecto.Changeset{}}
   def create_site(attributes) do
     %Site{}
     |> Site.create_changeset(attributes)
@@ -80,7 +68,8 @@ defmodule Demo.Sites do
   def get_site(site_id) do
     query =
       from site in Site,
-        where: site.id == ^site_id
+        where: site.id == ^site_id,
+        preload: [:controllers]
 
     case Repo.one(query) do
       %Site{} = site ->
@@ -89,6 +78,12 @@ defmodule Demo.Sites do
       nil ->
         {:error, :not_found}
     end
+  end
+
+  def delete_site(site_id) do
+    Site
+    |> Repo.get!(site_id)
+    |> Repo.delete!()
   end
 
   def update_site(site_id, params) do

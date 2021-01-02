@@ -3,11 +3,11 @@
 # Runs in phoenix container
 
 # Wait until Postgres is ready
-while ! pg_isready -q -h $POSTGRES_HOST -p $POSTGRES_PORT -U $POSTGRES_USER
-do
-  echo "$(date) - waiting for database to start"
-  sleep 2
-done
+# while ! pg_isready -q -h $POSTGRES_HOST -p $POSTGRES_PORT -U $POSTGRES_USER
+# do
+#   echo "$(date) - waiting for database to start"
+#   sleep 2
+# done
 
 echo "postgres is up - checking for database $POSTGRES_DB"
 

@@ -26,7 +26,7 @@ defmodule Demo.MixProject do
   def application do
     [
       mod: {Demo.Application, []},
-      extra_applications: [:logger, :runtime_tools]
+      extra_applications: [:logger, :runtime_tools, :observer, :wx]
     ]
   end
 
@@ -48,6 +48,7 @@ defmodule Demo.MixProject do
       {:geo_postgis, "~> 3.1"},
       {:gettext, "~> 0.11"},
       {:jason, "~> 1.0"},
+      {:observer_cli, "~> 1.5"},
       {:phoenix, "~> 1.5.6"},
       {:phoenix_ecto, "~> 4.1"},
       {:phoenix_html, "~> 2.11"},

@@ -35,9 +35,9 @@
     </thead>
 
 
-      <tbody id="sites">
+    <tbody id="sites">
       <%= for site <- @sites do %>
-        <tr id="<%= site.id %>" >
+        <tr phx-click="row_clicked" id="<%= site.id %>" phx-value-id="<%= site.id %>" >
           <td style="position: relative;">
             <input
               phx-click="check"

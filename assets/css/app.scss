@@ -1,9 +1,9 @@
 /* This file is for your main application css. */
 @import './phoenix.css';
-@import './forms.scss';
+// @import './forms.scss';
 @import '../node_modules/nprogress/nprogress.css';
 
-.h1 {
+h1 {
   font-weight: bold;
   font-size: 2rem;
   margin: 1rem 0;
@@ -164,4 +164,12 @@ a.active {
   top: 0;
   opacity: 0;
   cursor: pointer;
+}
+
+tr {
+  cursor: pointer;
+
+  &:hover {
+    background-color: rgb(236, 236, 236);
+  }
 }
