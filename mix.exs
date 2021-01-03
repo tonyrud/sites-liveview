@@ -44,6 +44,7 @@ defmodule Demo.MixProject do
       {:dialyxir, "~> 1.0", only: [:dev, :test], runtime: false},
       {:ecto_sql, "~> 3.4"},
       {:ex_doc, "~> 0.22.0", only: :dev, runtime: false},
+      {:faker, "~> 0.13", only: [:dev, :test]},
       {:floki, ">= 0.27.0", only: :test},
       {:geo_postgis, "~> 3.1"},
       {:gettext, "~> 0.11"},

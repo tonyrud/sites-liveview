@@ -82,8 +82,14 @@ defmodule Demo.Sites do
 
   def delete_site(site_id) do
     Site
-    |> Repo.get!(site_id)
-    |> Repo.delete!()
+    |> Repo.get(site_id)
+    |> case do
+      %Site{} = site ->
+        Repo.delete(site)
+
+      nil ->
+        {:error, :not_found}
+    end
   end
 
   def update_site(site_id, params) do
@@ -93,7 +99,7 @@ defmodule Demo.Sites do
           {:ok, %Site{} = site} ->
             site
             |> Site.update_changeset(params)
-            |> Repo.update!()
+            |> Repo.update()
 
           {:error, _reason} = error ->
             error
@@ -101,6 +107,8 @@ defmodule Demo.Sites do
       end)
 
     broadcast(update_result, :site_updated)
+
+    update_result
   end
 
   def broadcast(updated_site, event) do
