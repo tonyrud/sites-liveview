@@ -1,7 +1,8 @@
 defmodule DemoWeb.SitesCreateLive do
   @moduledoc """
-  LV for create new Sites
+  LiveView logic for creating new `Demo.Sites.Site`
   """
+
   use DemoWeb, :live_view
 
   alias Demo.{
@@ -23,15 +24,13 @@ defmodule DemoWeb.SitesCreateLive do
   end
 
   @impl true
+  @doc """
+  Form submit handler. Passes all form inputs to `Demo.Sites.create_site/1`
+  to run the business logic for creating a new `Demo.Sites.Site`
+  """
   def handle_event("save", %{"site" => form_params}, socket) do
     case Sites.create_site(form_params) do
       {:ok, _site} ->
-        # changeset = Site.create_changeset(%Site{})
-
-        # socket = assign(socket, changeset: changeset)
-
-        # {:noreply, socket}
-
         {:noreply,
          push_redirect(socket,
            to:

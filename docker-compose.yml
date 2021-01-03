@@ -16,7 +16,8 @@ services:
     ports:
       - '4000:4000'
     depends_on:
-      - db
+      db:
+        condition: service_healthy
   db:
     image: postgis/postgis:10-2.5-alpine
     environment:
@@ -26,6 +27,11 @@ services:
     restart: always
     ports:
       - 54322:5432
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U $$POSTGRES_USER']
+      interval: 10s
+      timeout: 5s
+      retries: 5
     volumes:
       - pgdata:/var/lib/postgresql/data
 

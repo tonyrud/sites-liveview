@@ -66,17 +66,22 @@ defmodule DemoWeb.GeoLocationsLive do
 
     form_deleted_keys =
       if Map.get(new_params, "search_type") === "site" do
-        site_id = new_params["site_id"] || Enum.at(socket.assigns.options.site_ids, 0)
+        site_id =
+          new_params["site_id"] || Enum.at(socket.assigns.options.site_ids, 0) |> Map.get(:value)
 
         new_params
         |> Map.delete("zip_code")
-        |> Map.put("site_id", Map.get(site_id, :value))
+        |> Map.put("site_id", site_id)
       else
-        zip = new_params["zip_code"] || Enum.at(socket.assigns.options.zipcodes, 0)
+        zip_code =
+          new_params["zip_code"] ||
+            socket.assigns.options.zipcodes
+            |> Enum.at(0)
+            |> Map.get(:value)
 
         new_params
         |> Map.delete("site_id")
-        |> Map.put("zip_code", Map.get(zip, :value))
+        |> Map.put("zip_code", zip_code)
       end
 
     updated_params =

@@ -65,6 +65,18 @@ defmodule DemoWeb.SitesLive do
     {:noreply, socket}
   end
 
+  def handle_event("row_clicked", %{"id" => id}, socket) do
+    {:noreply,
+     push_redirect(socket,
+       to:
+         Routes.live_path(
+           socket,
+           DemoWeb.SiteLive,
+           id
+         )
+     )}
+  end
+
   # Handles the click events for editing. Receives the %Site{} id and selects if it's not currently select,
   # and deselects if it is.
   # The id will be a string in html, and needs to be converted to an integer for correct comparison.

@@ -21,6 +21,7 @@ defmodule DemoWeb.Router do
     live "/sites", SitesLive
     live "/sites/create", SitesCreateLive
     live "/sites/distance-search", GeoLocationsLive
+    live "/sites/:id", SiteLive
   end
 
   # Other scopes may use custom stacks.

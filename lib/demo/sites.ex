@@ -1,6 +1,6 @@
 defmodule Demo.Sites do
   @moduledoc """
-  Context module for Sites
+  Context module for `Demo.Sites.Site`
   """
   import Ecto.Query
 
@@ -20,8 +20,9 @@ defmodule Demo.Sites do
                    )
 
   @doc """
-  Create a Site.
+  Create a new `Demo.Sites.Site`.
   """
+  @spec create_site(map()) :: {:ok, Site} | {:error, %Ecto.Changeset{}}
   def create_site(attributes) do
     %Site{}
     |> Site.create_changeset(attributes)
@@ -67,11 +68,24 @@ defmodule Demo.Sites do
   def get_site(site_id) do
     query =
       from site in Site,
-        where: site.id == ^site_id
+        where: site.id == ^site_id,
+        preload: [:controllers]
 
     case Repo.one(query) do
       %Site{} = site ->
         {:ok, site}
+
+      nil ->
+        {:error, :not_found}
+    end
+  end
+
+  def delete_site(site_id) do
+    Site
+    |> Repo.get(site_id)
+    |> case do
+      %Site{} = site ->
+        Repo.delete(site)
 
       nil ->
         {:error, :not_found}
@@ -85,7 +99,7 @@ defmodule Demo.Sites do
           {:ok, %Site{} = site} ->
             site
             |> Site.update_changeset(params)
-            |> Repo.update!()
+            |> Repo.update()
 
           {:error, _reason} = error ->
             error
@@ -93,6 +107,8 @@ defmodule Demo.Sites do
       end)
 
     broadcast(update_result, :site_updated)
+
+    update_result
   end
 
   def broadcast(updated_site, event) do

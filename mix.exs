@@ -11,7 +11,12 @@ defmodule Demo.MixProject do
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
       deps: deps(),
-      dialyzer: dialyzer()
+      dialyzer: dialyzer(),
+
+      # Docs
+      name: "Demo Sites",
+      source_url: "https://github.com/tonyrud/sites-liveview",
+      homepage_url: "http://YOUR_PROJECT_HOMEPAGE"
     ]
   end
 
@@ -21,7 +26,7 @@ defmodule Demo.MixProject do
   def application do
     [
       mod: {Demo.Application, []},
-      extra_applications: [:logger, :runtime_tools]
+      extra_applications: [:logger, :runtime_tools, :observer, :wx]
     ]
   end
 
@@ -34,24 +39,27 @@ defmodule Demo.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
+      {:credo, "~> 1.5", only: [:dev, :test], runtime: false},
       {:csv, "~> 2.4"},
+      {:dialyxir, "~> 1.0", only: [:dev, :test], runtime: false},
       {:ecto_sql, "~> 3.4"},
+      {:ex_doc, "~> 0.22.0", only: :dev, runtime: false},
+      {:faker, "~> 0.13", only: [:dev, :test]},
       {:floki, ">= 0.27.0", only: :test},
       {:geo_postgis, "~> 3.1"},
       {:gettext, "~> 0.11"},
       {:jason, "~> 1.0"},
+      {:observer_cli, "~> 1.5"},
       {:phoenix, "~> 1.5.6"},
       {:phoenix_ecto, "~> 4.1"},
-      {:postgrex, ">= 0.0.0"},
-      {:phoenix_live_view, "~> 0.14.6"},
       {:phoenix_html, "~> 2.11"},
-      {:phoenix_live_reload, "~> 1.2", only: :dev},
       {:phoenix_live_dashboard, "~> 0.3 or ~> 0.2.9"},
+      {:phoenix_live_reload, "~> 1.2", only: :dev},
+      {:phoenix_live_view, "~> 0.14.6"},
       {:plug_cowboy, "~> 2.0"},
+      {:postgrex, ">= 0.0.0"},
       {:telemetry_metrics, "~> 0.4"},
-      {:telemetry_poller, "~> 0.4"},
-      {:dialyxir, "~> 1.0", only: [:dev, :test], runtime: false},
-      {:credo, "~> 1.5", only: [:dev, :test], runtime: false}
+      {:telemetry_poller, "~> 0.4"}
     ]
   end
 
@@ -63,12 +71,18 @@ defmodule Demo.MixProject do
   # See the documentation for `Mix` for more info on aliases.
   defp aliases do
     [
+      ci: ["lint", "test", "dialyzer"],
       setup: ["deps.get", "ecto.setup", "cmd npm install --prefix assets"],
       "ecto.setup": ["ecto.create", "ecto.migrate"],
       "ecto.setup.dev": ["ecto.setup", "run priv/repo/seeds/seeds.exs"],
       "ecto.reset": ["ecto.drop", "ecto.setup"],
       "ecto.reset.dev": ["ecto.drop", "ecto.setup.dev"],
-      test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"]
+      test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"],
+      lint: [
+        "compile --warnings-as-errors",
+        "format --check-formatted",
+        "credo"
+      ]
     ]
   end
 
