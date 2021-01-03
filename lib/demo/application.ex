@@ -9,6 +9,7 @@ defmodule Demo.Application do
     children = [
       # Start the Ecto repository
       Demo.Repo,
+      Demo.Sessions.Supervisor,
       # Start the Telemetry supervisor
       DemoWeb.Telemetry,
       # Start the PubSub system
