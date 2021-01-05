@@ -1,4 +1,4 @@
-defmodule GatewayWeb.Sessions.Session do
+defmodule Demo.Sessions.Session do
   @moduledoc """
   This is the worker process that contains the state for the user's
   active session. When the user's session is terminated, this process
@@ -15,7 +15,10 @@ defmodule GatewayWeb.Sessions.Session do
 
   alias __MODULE__
 
-  alias Demo.Sessions.Supervisor
+  alias Demo.{
+    Users,
+    Sessions.Supervisor
+  }
 
   @fetch_session_timeout 60_000
 
@@ -37,31 +40,51 @@ defmodule GatewayWeb.Sessions.Session do
   defstruct ~w(token user_id username)a
 
   # ------------------------------
-  #   Public GenServer Interface
+  #   Public API
   # ------------------------------
 
   @doc """
   Start the session GenServer and link it to the
-  DynamicSupervisor defined in `GatewayWeb.Sessions.Supervisor`.
-  """
-  def start_link(token) do
-    session = %Session{token: token}
+  DynamicSupervisor defined in `Demo.Sessions.Supervisor`.
 
-    GenServer.start_link(__MODULE__, session)
+  Creates a pid based on a via tuple, using the token as the process id.
+  """
+  def start_link(user) do
+    session = Session.new(user)
+
+    GenServer.start_link(__MODULE__, session, name: process_name(session.token))
   end
 
-  def create_via_token(token) do
-    {:ok, pid} = Supervisor.register(token)
+  @doc """
+  Client facing function. This takes the auth params and logs in with `Demo.Users.login/1`
+  """
+  def create_via_creds(auth_params) do
+    case Users.login(auth_params) do
+      {:ok, user} ->
+        register_session(user)
 
-    # GenServer.call(pid, :fetch_session, @fetch_session_timeout)
-    # case Users.login(params) do
-    #   {:ok, %{"token" => token}} ->
-    #     create_via_token(token)
+      error ->
+        error
+    end
+  end
 
-    #   error ->
-    #     error
-    # end
-    # create_via_token(params.token)
+  def get_session(token) do
+    GenServer.call(process_name(token), :fetch_session, @fetch_session_timeout)
+  end
+
+  def remove_session(token) do
+    GenServer.call(process_name(token), :remove_session, @fetch_session_timeout)
+  end
+
+  defp process_name(token),
+    do: {:via, Registry, {SessionRegistry, "sesh:#{token}"}}
+
+  defp register_session(%{"token" => token} = user) do
+    case GenServer.whereis(process_name(token)) do
+      nil ->
+        Supervisor.register(user)
+        GenServer.call(process_name(user["token"]), :fetch_session, @fetch_session_timeout)
+    end
   end
 
   # ----------------------------------------
@@ -70,17 +93,37 @@ defmodule GatewayWeb.Sessions.Session do
 
   @impl true
   def init(session) do
-    {:ok, session, {:continue, :fetch_user_details}}
+    # run handle continue here, if some User session info is not in the initial req
+    {:ok, session}
   end
 
-  def handle_call({:set_token, token}, _from, session) do
-    new_session = %{session | token: token}
+  # @impl true
+  # def handle_continue(:fetch_user_details, %Session{token: token, user_id: nil}) do
+  #   user = %{
+  #     username: "tonyrud",
+  #     user_id: "asdfas;dkasfb"
+  #   }
 
-    {:reply, new_session, new_session}
+  #   session = Session.new(token, user)
+
+  #   {:noreply, session}
+  # end
+
+  def new(user) do
+    %Session{
+      user_id: user["id"],
+      username: user["username"],
+      token: user["token"]
+    }
   end
 
-  def handle_call(:destroy_session, _from, %Session{token: token} = session) do
-    # Logout as side-effect, previously we were ignoring the return value, but still blocking
+  @impl true
+  def handle_call(:fetch_session, _from, session) do
+    {:reply, session, session}
+  end
+
+  def handle_call(:remove_session, _from, %Session{token: token} = session) do
+    # Logout as side-effect
     # Task.start(fn -> Users.logout(%{token: token}) end)
     Logger.info("Killing session with token: #{token}")
 

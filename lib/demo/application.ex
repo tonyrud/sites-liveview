@@ -9,7 +9,8 @@ defmodule Demo.Application do
     children = [
       # Start the Ecto repository
       Demo.Repo,
-      Demo.Sessions.Supervisor,
+      # Start the session registry
+      {Registry, keys: :unique, name: SessionRegistry},
       # Start the Telemetry supervisor
       DemoWeb.Telemetry,
       # Start the PubSub system
@@ -19,6 +20,18 @@ defmodule Demo.Application do
       # Start a worker by calling: Demo.Worker.start_link(arg)
       # {Demo.Worker, arg}
     ]
+
+    session_children = [
+      # Start the session dynamic supervisor
+      Demo.Sessions.Supervisor
+    ]
+
+    children =
+      case Application.get_env(:demo, :env) do
+        # don't start Session tree when in test env
+        :test -> children
+        _ -> children ++ session_children
+      end
 
     # See https://hexdocs.pm/elixir/Supervisor.html
     # for other strategies and supported options

@@ -46,7 +46,7 @@ jobs:
           otp-version: '22.2.8' # Define the OTP version [required]
 
       - name: Check for deps cache
-        uses: actions/cache@v1
+        uses: actions/cache@v2
         id: deps-cache
         with:
           path: deps
@@ -72,7 +72,7 @@ jobs:
         run: mix test
 
       - name: Check for PLT Cache
-        uses: actions/cache@v1
+        uses: actions/cache@v2
         id: plt-cache
         with:
           path: priv/plts

@@ -1,6 +1,6 @@
 defmodule Demo.Sessions.Supervisor do
   @moduledoc """
-  The supervisor is responsible for creating User session state.
+  The supervisor is responsible for creating and storing a User's session state.
   """
 
   use DynamicSupervisor
@@ -16,8 +16,22 @@ defmodule Demo.Sessions.Supervisor do
   @doc """
   Registers a new worker, and creates the worker process
   """
-  def register(token) do
-    spec = {Demo.Sessions.Session, token}
+  def register(user) do
+    spec = {Demo.Sessions.Session, user}
     DynamicSupervisor.start_child(__MODULE__, spec)
+  end
+
+  @doc """
+  Removes a session from the supervision tree
+  """
+  def remove_session(session_pid) do
+    DynamicSupervisor.terminate_child(__MODULE__, session_pid)
+  end
+
+  @doc """
+  Utility method to check which processes are under supervision
+  """
+  def children do
+    DynamicSupervisor.which_children(__MODULE__)
   end
 end
