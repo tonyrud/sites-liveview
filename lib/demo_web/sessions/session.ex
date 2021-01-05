@@ -16,8 +16,8 @@ defmodule Demo.Sessions.Session do
   alias __MODULE__
 
   alias Demo.{
-    Users,
-    Sessions.Supervisor
+    Sessions.Supervisor,
+    Users
   }
 
   @fetch_session_timeout 60_000
@@ -62,9 +62,6 @@ defmodule Demo.Sessions.Session do
     case Users.login(auth_params) do
       {:ok, user} ->
         register_session(user)
-
-      error ->
-        error
     end
   end
 

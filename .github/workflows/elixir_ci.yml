@@ -11,7 +11,7 @@ env:
 
 jobs:
   runner-job:
-    name: Build and test
+    name: Run CI
     runs-on:
       ubuntu-latest
 
@@ -50,8 +50,8 @@ jobs:
         id: deps-cache
         with:
           path: deps
-          key: ${{ runner.os }}-mix-${{ hashFiles(format('{0}{1}', github.workspace, '/mix.lock')) }}
-          restore-keys: ${{ runner.os }}-mix-
+          key: ${{ runner.os }}-abc-123
+          restore-keys: ${{ runner.os }}-abc-123
 
       - name: Install Mix Dependencies
         if: steps.deps-cache.outputs.cache-hit != 'true'
@@ -77,6 +77,7 @@ jobs:
         with:
           path: priv/plts
           key: ${{ runner.os }}-plts-${{ hashFiles(format('{0}{1}', github.workspace, '/mix.lock')) }}
+          restore-keys: ${{ runner.os }}-plts
 
       - name: Create PLTs
         if: steps.plt-cache.outputs.cache-hit != 'true'

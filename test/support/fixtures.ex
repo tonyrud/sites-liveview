@@ -41,7 +41,7 @@ defmodule Demo.Test.Fixtures do
     Repo.insert!(controller)
   end
 
-  def id() do
+  def id do
     Enum.random(1..999) + Enum.random(1..999)
   end
 end
