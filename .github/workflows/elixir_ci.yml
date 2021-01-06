@@ -41,11 +41,11 @@ jobs:
           mix local.hex --force
           mix do compile
 
-      - name: Upload build artifacts
-        uses: actions/upload-artifact@v2
-        with:
-          name: build-artifact
-          path: _build
+      # - name: Upload build artifacts
+      #   uses: actions/upload-artifact@v2
+      #   with:
+      #     name: build-artifact
+      #     path: _build
 
   format:
     needs: build
@@ -59,11 +59,23 @@ jobs:
           elixir-version: '1.11'
           otp-version: '22.2.8'
 
-      - name: Download build artifacts
-        uses: actions/download-artifact@v2
+      - name: Check for deps cache
+        uses: actions/cache@v2
+        id: deps-cache
         with:
-          name: build-artifact
-          path: _build
+          path: deps
+          key: ${{ runner.os }}-mix-${{ hashFiles(format('{0}{1}', github.workspace, '/mix.lock')) }}
+          restore-keys: ${{ runner.os }}-mix-
+
+      - name: Install Mix Dependencies
+        if: steps.deps-cache.outputs.cache-hit != 'true'
+        run: mix deps.get
+
+      # - name: Download build artifacts
+      #   uses: actions/download-artifact@v2
+      #   with:
+      #     name: build-artifact
+      #     path: _build
 
       - name: Check Formatting
         run: mix format --check-formatted
