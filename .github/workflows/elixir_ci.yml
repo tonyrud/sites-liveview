@@ -40,7 +40,7 @@ jobs:
             _build
             priv/plts
           key: ${{ runner.os }}-${{ env.ELIXIR_VERSION }}-${{ env.OTP_VERSION }}-${{ hashFiles('mix.lock') }}
-          # restore-keys: ${{ runner.os }}-mix-
+          restore-keys: ${{ runner.os }}-${{ env.ELIXIR_VERSION }}-${{ env.OTP_VERSION }}-
 
       - name: Intstall Dependencies
         if: steps.mix-cache.outputs.cache-hit != 'true'
@@ -79,6 +79,7 @@ jobs:
             _build
             priv/plts
           key: ${{ runner.os }}-${{ env.ELIXIR_VERSION }}-${{ env.OTP_VERSION }}-${{ hashFiles('mix.lock') }}
+          restore-keys: ${{ runner.os }}-${{ env.ELIXIR_VERSION }}-${{ env.OTP_VERSION }}-
 
       - name: Check Format
         run: mix format --check-formatted
@@ -129,49 +130,9 @@ jobs:
             _build
             priv/plts
           key: ${{ runner.os }}-${{ env.ELIXIR_VERSION }}-${{ env.OTP_VERSION }}-${{ hashFiles('mix.lock') }}
+          restore-keys: ${{ runner.os }}-${{ env.ELIXIR_VERSION }}-${{ env.OTP_VERSION }}-
 
       - name: Run tests
         env:
           POSTGRES_PORT: 5432
         run: mix test
-
-  # dialyzer:
-  #   needs: build
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v2
-
-  #     - uses: actions/setup-elixir@v1.5
-  #       with:
-  #         experimental-otp: true
-  #         elixir-version: ${{ env.ELIXIR_VERSION }}
-  #         otp-version: ${{ env.OTP_VERSION }}
-
-  #     - name: Check for deps cache
-  #       uses: actions/cache@v2
-  #       id: deps-cache
-  #       with:
-  #         path: deps
-  #         key: ${{ runner.os }}-mix-${{ hashFiles(format('{0}{1}', github.workspace, '/mix.lock')) }}
-  #         restore-keys: ${{ runner.os }}-mix-
-
-  #     - name: Install Mix Dependencies
-  #       if: steps.deps-cache.outputs.cache-hit != 'true'
-  #       run: mix deps.get
-
-  #     - name: Check for PLT Cache
-  #       uses: actions/cache@v2
-  #       id: plt-cache
-  #       with:
-  #         path: priv/plts
-  #         key: ${{ runner.os }}-plts-${{ hashFiles(format('{0}{1}', github.workspace, '/mix.lock')) }}
-  #         restore-keys: ${{ runner.os }}-plts
-
-  #     - name: Create PLTs
-  #       if: steps.plt-cache.outputs.cache-hit != 'true'
-  #       run: |
-  #         mkdir -p priv/plts
-  #         mix dialyzer --plt
-
-  #     - name: Run dialyzer
-  #       run: mix dialyzer --no-check
