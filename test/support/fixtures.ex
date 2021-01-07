@@ -31,7 +31,7 @@ defmodule Demo.Test.Fixtures do
 
   def make(:controller, site) do
     controller = %Controller{
-      id: Enum.random(1..999),
+      id: id(),
       name: Faker.Company.bs(),
       mode: Enum.random(["basic", "smart"]),
       type: Enum.random(["cellular", "wifi"]),
@@ -39,5 +39,9 @@ defmodule Demo.Test.Fixtures do
     }
 
     Repo.insert!(controller)
+  end
+
+  def id do
+    Enum.random(1..999) + Enum.random(1..999)
   end
 end

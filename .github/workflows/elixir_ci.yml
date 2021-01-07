@@ -2,87 +2,137 @@ name: Elixir CI
 
 on:
   push:
-    branches: [main]
+    branches:
+      - main
   pull_request:
-    branches: [main]
+    branches:
+      - main
 
 env:
   MIX_ENV: test
+  ELIXIR_VERSION: '1.11'
+  OTP_VERSION: '22.2.8'
 
 jobs:
-  runner-job:
-    name: Build and test
-    runs-on:
-      ubuntu-latest
+  build:
+    runs-on: ubuntu-latest
 
-      # Service containers to run with `runner-job`
+    steps:
+      - name: Cancel Previous Runs
+        uses: styfle/cancel-workflow-action@0.6.0
+        with:
+          access_token: ${{ github.token }}
+
+      - uses: actions/checkout@v2
+
+      - uses: actions/setup-elixir@v1.5
+        with:
+          experimental-otp: true
+          elixir-version: ${{ env.ELIXIR_VERSION }}
+          otp-version: ${{ env.OTP_VERSION }}
+
+      - name: Retrieve Cached Dependencies
+        uses: actions/cache@v2
+        id: mix-cache
+        with:
+          path: |
+            deps
+            _build
+            priv/plts
+          key: ${{ runner.os }}-${{ env.ELIXIR_VERSION }}-${{ env.OTP_VERSION }}-${{ hashFiles('mix.lock') }}
+          restore-keys: ${{ runner.os }}-${{ env.ELIXIR_VERSION }}-${{ env.OTP_VERSION }}-
+
+      - name: Intstall Dependencies
+        if: steps.mix-cache.outputs.cache-hit != 'true'
+        run: |
+          mkdir -p priv/plts
+          mix local.rebar --force
+          mix local.hex --force
+          mix deps.get
+          mix deps.compile
+          mix dialyzer --plt
+
+  code_analysis:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Cancel Previous Runs
+        uses: styfle/cancel-workflow-action@0.6.0
+        with:
+          access_token: ${{ github.token }}
+
+      - uses: actions/checkout@v2
+
+      - uses: actions/setup-elixir@v1.5
+        with:
+          experimental-otp: true
+          elixir-version: ${{ env.ELIXIR_VERSION }}
+          otp-version: ${{ env.OTP_VERSION }}
+
+      - name: Retrieve deps cache
+        uses: actions/cache@v2
+        id: mix-cache
+        with:
+          path: |
+            deps
+            _build
+            priv/plts
+          key: ${{ runner.os }}-${{ env.ELIXIR_VERSION }}-${{ env.OTP_VERSION }}-${{ hashFiles('mix.lock') }}
+          restore-keys: ${{ runner.os }}-${{ env.ELIXIR_VERSION }}-${{ env.OTP_VERSION }}-
+
+      - name: Check Format
+        run: mix format --check-formatted
+
+      - name: Run Credo
+        run: mix lint
+
+      - name: Run Dialyzer
+        run: mix dialyzer --no-check
+
+  test:
+    needs: build
+    runs-on: ubuntu-latest
     services:
-      # Label used to access the service container
       postgres:
-        # Docker Hub image
         image: postgis/postgis:10-2.5-alpine
-        # Provide the password for postgres
         env:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
-        # Set health checks to wait until postgres has started
         options: >-
           --health-cmd pg_isready
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
         ports:
-          # Maps tcp port 5432 on service container to the host
           - 5432:5432
 
     steps:
+      - name: Cancel Previous Runs
+        uses: styfle/cancel-workflow-action@0.6.0
+        with:
+          access_token: ${{ github.token }}
+
       - uses: actions/checkout@v2
 
-      - name: Set up Elixir
-        uses: actions/setup-elixir@v1.5
+      - uses: actions/setup-elixir@v1.5
         with:
           experimental-otp: true
-          elixir-version: '1.11' # Define the elixir version [required]
-          otp-version: '22.2.8' # Define the OTP version [required]
+          elixir-version: ${{ env.ELIXIR_VERSION }}
+          otp-version: ${{ env.OTP_VERSION }}
 
-      - name: Check for deps cache
-        uses: actions/cache@v1
-        id: deps-cache
+      - name: Retrieve deps cache
+        uses: actions/cache@v2
+        id: mix-cache
         with:
-          path: deps
-          key: ${{ runner.os }}-mix-${{ hashFiles(format('{0}{1}', github.workspace, '/mix.lock')) }}
-          restore-keys: ${{ runner.os }}-mix-
-
-      - name: Install Mix Dependencies
-        if: steps.deps-cache.outputs.cache-hit != 'true'
-        run: |
-          mix local.rebar --force
-          mix local.hex --force
-          mix deps.get
-
-      - name: Check Formatting
-        run: mix format --check-formatted
-
-      - name: Run Credo
-        run: mix credo --strict
+          path: |
+            deps
+            _build
+            priv/plts
+          key: ${{ runner.os }}-${{ env.ELIXIR_VERSION }}-${{ env.OTP_VERSION }}-${{ hashFiles('mix.lock') }}
+          restore-keys: ${{ runner.os }}-${{ env.ELIXIR_VERSION }}-${{ env.OTP_VERSION }}-
 
       - name: Run tests
         env:
           POSTGRES_PORT: 5432
         run: mix test
-
-      - name: Check for PLT Cache
-        uses: actions/cache@v1
-        id: plt-cache
-        with:
-          path: priv/plts
-          key: ${{ runner.os }}-plts-${{ hashFiles(format('{0}{1}', github.workspace, '/mix.lock')) }}
-
-      - name: Create PLTs
-        if: steps.plt-cache.outputs.cache-hit != 'true'
-        run: |
-          mkdir -p priv/plts
-          mix dialyzer --plt
-
-      - name: Run dialyzer
-        run: mix dialyzer --no-check
