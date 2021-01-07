@@ -23,4 +23,5 @@ RUN mix do compile
 
 RUN npm install --prefix assets && npm cache clean --force
 
+
 ENTRYPOINT ["sh", "./entrypoint.sh"]
