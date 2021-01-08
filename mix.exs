@@ -77,7 +77,7 @@ defmodule Demo.MixProject do
       "ecto.setup.dev": ["ecto.setup", "run priv/repo/seeds/seeds.exs"],
       "ecto.reset": ["ecto.drop", "ecto.setup"],
       "ecto.reset.dev": ["ecto.drop", "ecto.setup.dev"],
-      test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"],
+      test: ["ecto.create --quiet", "ecto.migrate --quiet", "test --trace --slowest 10"],
       lint: [
         "compile --warnings-as-errors",
         "format --check-formatted",

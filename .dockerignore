@@ -36,3 +36,9 @@ npm-debug.log
 /priv/static/
 
 .iex.exs
+
+.git/
+.github/
+.gitignore
+
+docker-compose.yml
