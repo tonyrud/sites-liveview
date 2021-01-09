@@ -77,7 +77,7 @@ defmodule Demo.MixProject do
       "ecto.setup.dev": ["ecto.setup", "run priv/repo/seeds/seeds.exs"],
       "ecto.reset": ["ecto.drop", "ecto.setup"],
       "ecto.reset.dev": ["ecto.drop", "ecto.setup.dev"],
-      test: ["ecto.create --quiet", "ecto.migrate --quiet", "test --trace --slowest 10"],
+      test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"],
       lint: [
         "compile --warnings-as-errors",
         "format --check-formatted",
@@ -89,8 +89,8 @@ defmodule Demo.MixProject do
   defp dialyzer do
     [
       plt_add_apps: [:mix, :ex_unit],
-      plt_core_path: "priv/plts",
-      plt_file: {:no_warn, "priv/plts/dialyzer.plt"}
+      plt_core_path: "_build",
+      plt_file: {:no_warn, "_build/dialyzer.plt"}
     ]
   end
 end
