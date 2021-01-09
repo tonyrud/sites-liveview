@@ -9,6 +9,7 @@ RUN apk add --no-cache npm && \
 
 # JS dependencies
 COPY /assets/package*.json ./assets/
+RUN npm --version
 RUN npm install --prefix assets && npm cache clean --force
 
 # Elixir dependencies
