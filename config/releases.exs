@@ -4,32 +4,35 @@
 # remember to add this file to your .gitignore.
 import Config
 
-database_url =
-  System.get_env("DATABASE_URL") ||
-    raise """
-    environment variable DATABASE_URL is missing.
-    For example: ecto://USER:PASS@HOST/DATABASE
-    """
+# ------------------------------
+#   Release ENVs
+# ------------------------------
+
+# database_url =
+#   System.get_env("DATABASE_URL") ||
+#     raise """
+#     environment variable DATABASE_URL is missing.
+#     For example: ecto://USER:PASS@HOST/DATABASE
+#     """
+username = System.fetch_env!("POSTGRES_USER")
+password = System.fetch_env!("POSTGRES_PASSWORD")
+database = System.fetch_env!("POSTGRES_DB")
+hostname = System.fetch_env!("POSTGRES_HOST")
+
+secret_key_base = System.fetch_env!("SECRET_KEY_BASE")
+
+host = System.fetch_env!("HOST")
 
 config :demo, Demo.Repo,
   # ssl: true,
-  url: database_url,
+  # url: database_url,
+  username: username,
+  password: password,
+  database: database,
+  hostname: hostname,
   pool_size: String.to_integer(System.get_env("POOL_SIZE") || "10"),
   show_sensitive_data_on_connection_error: true,
   types: Demo.PostgresTypes
-
-secret_key_base =
-  System.get_env("SECRET_KEY_BASE") ||
-    raise """
-    environment variable SECRET_KEY_BASE is missing.
-    You can generate one by calling: mix phx.gen.secret
-    """
-
-host =
-  System.get_env("HOST") ||
-    raise """
-    environment variable HOST is missing.
-    """
 
 config :demo, DemoWeb.Endpoint,
   url: [host: host],
