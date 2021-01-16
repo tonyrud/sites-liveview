@@ -9,7 +9,27 @@ defmodule Demo.Release do
 
   def setup do
     load_app()
+    create_db()
     migrate()
+  end
+
+  defp create_db do
+    for repo <- repos() do
+      :ok = ensure_repo_created(repo)
+    end
+
+    IO.puts("create_db task done!")
+  end
+
+  defp ensure_repo_created(repo) do
+    IO.puts("create #{inspect(repo)} database if it doesn't exist")
+    IO.puts("config #{inspect(repo.config)}")
+
+    case repo.__adapter__.storage_up(repo.config) do
+      :ok -> :ok
+      {:error, :already_up} -> :ok
+      {:error, term} -> {:error, term}
+    end
   end
 
   defp migrate do
