@@ -1,0 +1,78 @@
+name: Build Branch
+
+on:
+  push
+
+env:
+  MIX_ENV: prod
+  ELIXIR_VERSION: '1.11.3'
+  OTP_VERSION: '22.2.8'
+
+jobs:
+  build-release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Cancel Previous Runs
+        uses: styfle/cancel-workflow-action@0.6.0
+        with:
+          access_token: ${{ github.token }}
+
+      - name: Pull Latest Code
+        uses: actions/checkout@v2
+      
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-2
+
+      - name: Get Vars
+        uses: FranzDiebold/github-env-vars-action@v2
+
+      - run: echo "New path=$CI_ACTOR/$CI_REF_NAME"
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+
+      - name: Build, tag, and push image to Amazon ECR
+        id: build-image
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          ECR_REPOSITORY: sites-liveview-releases
+        run: |
+          # Build a docker container and
+          # push it to ECR so that it can
+          # be deployed to ECS.
+          COMMIT_HASH=$(echo $GITHUB_SHA | cut -c 1-8)
+          IMAGE_TAG=$CI_REF_NAME-$COMMIT_HASH
+          docker build -f release.Dockerfile -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+          echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
+
+      - name: Fill in the new image ID in the Amazon ECS task definition
+        id: task-def
+        uses: aws-actions/amazon-ecs-render-task-definition@v1
+        with:
+          task-definition: task-definition.json
+          container-name: sites-dynamic-container
+          image: ${{ steps.build-image.outputs.image }}
+
+      - name: Deploy Amazon ECS task definition
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+        with:
+          task-definition: ${{ steps.task-def.outputs.task-definition }}
+          service: sites-dynamic-service
+          cluster: sites-liveview
+          wait-for-service-stability: true
+      # - run: docker build -t sites-liveview-releases:v1 .
+      # - name: Push to ECR
+      #   id: ecr
+      #   uses: jwalton/gh-ecr-push@v1
+      #   with:
+      #     access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      #     secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      #     region: us-east-2
+      #     image: sites-liveview-releases:v1
