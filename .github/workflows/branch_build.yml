@@ -5,8 +5,6 @@ on:
 
 env:
   MIX_ENV: prod
-  ELIXIR_VERSION: '1.11.3'
-  OTP_VERSION: '22.2.8'
 
 jobs:
   build-release:
@@ -17,6 +15,22 @@ jobs:
         uses: styfle/cancel-workflow-action@0.6.0
         with:
           access_token: ${{ github.token }}
+      
+      - name: Check CI Tests Pass
+        id: commit-status
+        run: |
+          # Check the status of the Git commit
+          CURRENT_STATUS=$(curl --url https://api.github.com/repos/${{ github.repository }}/commits/${{ github.sha }}/status --header 'authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' | jq -r '.state');
+          echo "Current status is: $CURRENT_STATUS"
+          while [ "${CURRENT_STATUS^^}" = "PENDING" ]; 
+            do sleep 10; 
+            CURRENT_STATUS=$(curl --url https://api.github.com/repos/${{ github.repository }}/commits/${{ github.sha }}/status --header 'authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' | jq -r '.state');
+          done;
+          echo "Current status is: $CURRENT_STATUS"
+          if [ "${CURRENT_STATUS^^}" = "FAILURE" ]; 
+            then echo "Commit status failed. Canceling execution"; 
+            exit 1; 
+          fi
 
       - name: Pull Latest Code
         uses: actions/checkout@v2
@@ -67,12 +81,3 @@ jobs:
           service: sites-dynamic-service
           cluster: sites-liveview
           wait-for-service-stability: true
-      # - run: docker build -t sites-liveview-releases:v1 .
-      # - name: Push to ECR
-      #   id: ecr
-      #   uses: jwalton/gh-ecr-push@v1
-      #   with:
-      #     access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-      #     secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      #     region: us-east-2
-      #     image: sites-liveview-releases:v1

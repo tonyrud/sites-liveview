@@ -15,7 +15,7 @@ defmodule DemoWeb.HomeLive do
   @impl true
   def render(assigns) do
     ~L"""
-    <h1>No content</h1>
+    <h1>Released from build-updates!</h1>
     """
   end
 end
