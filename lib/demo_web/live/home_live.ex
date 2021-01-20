@@ -15,7 +15,9 @@ defmodule DemoWeb.HomeLive do
   @impl true
   def render(assigns) do
     ~L"""
-    <h1>Released from build-updates!</h1>
+    <h1>Released from build-updates branch!</h1>
+
+    Database: <%= Keyword.fetch!(Application.get_env(:demo, Demo.Repo), :database) %>
     """
   end
 end
