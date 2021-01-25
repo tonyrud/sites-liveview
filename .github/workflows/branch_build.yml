@@ -16,25 +16,33 @@ jobs:
         with:
           access_token: ${{ github.token }}
       
-      # - name: Check CI Tests Pass
-      #   id: commit-status
-      #   run: |
-      #     # Check the status of the Git commit
-      #     CURRENT_STATUS=$(curl --url https://api.github.com/repos/${{ github.repository }}/commits/${{ github.sha }}/status --header 'authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' | jq -r '.state');
-      #     echo "Current status is: $CURRENT_STATUS"
-      #     while [ "${CURRENT_STATUS^^}" = "PENDING" ]; 
-      #       do sleep 10; 
-      #       CURRENT_STATUS=$(curl --url https://api.github.com/repos/${{ github.repository }}/commits/${{ github.sha }}/status --header 'authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' | jq -r '.state');
-      #     done;
-      #     echo "Current status is: $CURRENT_STATUS"
-      #     if [ "${CURRENT_STATUS^^}" = "FAILURE" ]; 
-      #       then echo "Commit status failed. Canceling execution"; 
-      #       exit 1; 
-      #     fi
-
       - name: Pull Latest Code
         uses: actions/checkout@v2
+
+      # --------------------- 
+      # Env Setup
+      # ---------------------
+      - name: Get Vars
+        uses: FranzDiebold/github-env-vars-action@v2
+
+      - name: Set ENV Vars for migrations
+        run: |
+          echo "POSTGRES_USER=postgres" >> $GITHUB_ENV
+          echo "POSTGRES_PASSWORD=${{ secrets.POSTGRES_DEV_PASSWORD }}" >> $GITHUB_ENV
+          echo "POSTGRES_DB=$CI_REF_NAME" >> $GITHUB_ENV
+          echo "POSTGRES_HOST=${{ secrets.POSTGRES_DEV_PASSWORD }}" >> $GITHUB_ENV
+            
+
+      # Examples for semver releases
+      # https://github.com/jossef/action-semantic-release-info
+      # https://github.com/semantic-release/semantic-release/blob/master/docs/recipes/github-actions.md
+      - name: Gets semantic release info
+        id: semantic_release_info
+        uses: jossef/action-semantic-release-info@v1
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
       
+
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
@@ -42,18 +50,12 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-2
 
-      - name: Get Vars
-        uses: FranzDiebold/github-env-vars-action@v2
-
+      # --------------------- 
+      # ECR Build Release and Push Image
+      # ---------------------
       - name: Login to Amazon ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
-      
-      - name: Gets semantic release info
-        id: semantic_release_info
-        uses: jossef/action-semantic-release-info@v1
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
 
       - name: Build, tag, and push image to Amazon ECR
         id: build-image
@@ -68,12 +70,21 @@ jobs:
           IMAGE_TAG=$CI_REF_NAME-$COMMIT_HASH
           docker build -f release.Dockerfile -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+          echo "::set-env name=REPOSITORY_URI:$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
           echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
       
       - run: echo release info - ${{ steps.semantic_release_info.outputs }}
 
+      # --------------------- 
+      # Run Migrations and DB Setup
+      # ---------------------
+
       # - name: Run migrations
       #   run: sh pre_start.sh
+
+      # --------------------- 
+      # Push ECR Image to ECS Container
+      # ---------------------
 
       # - name: Update task definition
       #   uses: jossef/action-set-json-field@v1
