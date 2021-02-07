@@ -23,7 +23,7 @@ defmodule Demo.Release do
 
   defp ensure_repo_created(repo) do
     IO.puts("create #{inspect(repo)} database if it doesn't exist")
-    IO.puts("config #{inspect(repo.config)}")
+    IO.puts("repo config #{inspect(repo.config)}")
 
     case repo.__adapter__.storage_up(repo.config) do
       :ok -> :ok

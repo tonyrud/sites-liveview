@@ -1,7 +1,7 @@
 name: Build Branch
 
 on:
-  pull_request:
+  push
 
 env:
   MIX_ENV: prod
@@ -24,13 +24,14 @@ jobs:
       # ---------------------
       - name: Get Vars
         uses: FranzDiebold/github-env-vars-action@v2
-
+      
+      # GHA needs these to run migrations 
       - name: Set ENV Vars for migrations
         run: |
           echo "POSTGRES_USER=postgres" >> $GITHUB_ENV
           echo "POSTGRES_PASSWORD=${{ secrets.POSTGRES_DEV_PASSWORD }}" >> $GITHUB_ENV
-          echo "POSTGRES_DB=$CI_REF_NAME" >> $GITHUB_ENV
-          echo "POSTGRES_HOST=${{ secrets.POSTGRES_DEV_PASSWORD }}" >> $GITHUB_ENV
+          echo "POSTGRES_DB=sites_dev" >> $GITHUB_ENV
+          echo "POSTGRES_HOST=${{ secrets.POSTGRES_DEV_HOST }}" >> $GITHUB_ENV
             
 
       # Examples for semver releases
@@ -49,6 +50,15 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-2
+      
+      - name: Public IP
+        id: ip
+        uses: haythem/public-ip@v1.2
+
+      - name: Print Public IP
+        run: |
+          echo ${{ steps.ip.outputs.ipv4 }}
+          echo ${{ steps.ip.outputs.ipv6 }}
 
       # --------------------- 
       # ECR Build Release and Push Image
@@ -63,29 +73,36 @@ jobs:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           ECR_REPOSITORY: sites-liveview-releases
         run: |
-          # Build a docker container and
-          # push it to ECR so that it can
-          # be deployed to ECS.
+          # Build a docker container and push it to ECR so that it can be deployed to ECS.
           COMMIT_HASH=$(echo $GITHUB_SHA | cut -c 1-7)
           IMAGE_TAG=$CI_REF_NAME-$COMMIT_HASH
+          FULL_IMG_PATH=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+
+          # add image path to action env for migrations access
+          echo "FULL_IMG_PATH=$FULL_IMG_PATH" >> $GITHUB_ENV
+
           docker build -f release.Dockerfile -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
           echo "::set-env name=REPOSITORY_URI:$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
           echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
       
-      - run: echo release info - ${{ steps.semantic_release_info.outputs }}
+      - name: Check semver stuff
+        run: |
+          echo release tag - ${{ steps.semantic_release_info.outputs.git_tag }}
 
       # --------------------- 
       # Run Migrations and DB Setup
       # ---------------------
 
-      - name: Run migrations
-        run: sh pre_start.sh
+      # This fails due to no access to RDS :( 
+      # - name: Run migrations
+      #   run: sh pre_start.sh
+
 
       # --------------------- 
       # Push ECR Image to ECS Container
       # ---------------------
-
+      # Updates the task def with the current semver
       # - name: Update task definition
       #   uses: jossef/action-set-json-field@v1
       #   with:
@@ -97,14 +114,14 @@ jobs:
         id: task-def
         uses: aws-actions/amazon-ecs-render-task-definition@v1
         with:
-          task-definition: task-definition.json
-          container-name: sites-dynamic-container
+          task-definition: task-definition-develop.json
+          container-name: sites-container-develop
           image: ${{ steps.build-image.outputs.image }}
 
       - name: Deploy Amazon ECS task definition
         uses: aws-actions/amazon-ecs-deploy-task-definition@v1
         with:
           task-definition: ${{ steps.task-def.outputs.task-definition }}
-          service: sites-dynamic-service
+          service: sites-develop-service
           cluster: sites-liveview
           wait-for-service-stability: true

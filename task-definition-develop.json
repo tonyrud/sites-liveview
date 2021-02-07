@@ -4,7 +4,7 @@
     {
       "portMappings": [
         {
-          "hostPort": 4002,
+          "hostPort": 80,
           "protocol": "tcp",
           "containerPort": 4000
         }
@@ -39,20 +39,16 @@
         }
       ],
       "image": "326347646211.dkr.ecr.us-east-2.amazonaws.com/sites-liveview-releases::00000",
-      "name": "sites-dynamic-container"
+      "name": "sites-container-develop"
     }
   ],
   "placementConstraints": [],
-  "memory": "400",
+  "memory": "1024",
   "taskRoleArn": "arn:aws:iam::326347646211:role/ecsTaskExecutionRole",
-  "compatibilities": [
-    "EC2"
-  ],
-  "family": "sites-dynamic-task",
-  "requiresAttributes": [],
+  "family": "sites-task-develop",
   "requiresCompatibilities": [
     "EC2"
   ],
-  "cpu": "400",
+  "cpu": "2048",
   "volumes": []
 }

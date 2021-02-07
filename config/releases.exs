@@ -19,13 +19,12 @@ password = System.fetch_env!("POSTGRES_PASSWORD")
 database = System.fetch_env!("POSTGRES_DB")
 hostname = System.fetch_env!("POSTGRES_HOST")
 
+# Required for application, but not migrations
 secret_key_base = System.fetch_env!("SECRET_KEY_BASE")
-
 host = System.fetch_env!("HOST")
 
 config :demo, Demo.Repo,
   # ssl: true,
-  # url: database_url,
   username: username,
   password: password,
   database: database,
