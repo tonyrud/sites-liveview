@@ -1,7 +1,7 @@
-name: Build Branch
+name:  Build and Release Develop Branch
 
-on:
-  push
+# on:
+#   push
 
 env:
   MIX_ENV: prod
@@ -24,15 +24,6 @@ jobs:
       # ---------------------
       - name: Get Vars
         uses: FranzDiebold/github-env-vars-action@v2
-      
-      # GHA needs these to run migrations 
-      - name: Set ENV Vars for migrations
-        run: |
-          echo "POSTGRES_USER=postgres" >> $GITHUB_ENV
-          echo "POSTGRES_PASSWORD=${{ secrets.POSTGRES_DEV_PASSWORD }}" >> $GITHUB_ENV
-          echo "POSTGRES_DB=sites_dev" >> $GITHUB_ENV
-          echo "POSTGRES_HOST=${{ secrets.POSTGRES_DEV_HOST }}" >> $GITHUB_ENV
-            
 
       # Examples for semver releases
       # https://github.com/jossef/action-semantic-release-info
@@ -43,22 +34,12 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ github.token }}
       
-
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-2
-      
-      - name: Public IP
-        id: ip
-        uses: haythem/public-ip@v1.2
-
-      - name: Print Public IP
-        run: |
-          echo ${{ steps.ip.outputs.ipv4 }}
-          echo ${{ steps.ip.outputs.ipv6 }}
 
       # --------------------- 
       # ECR Build Release and Push Image
@@ -86,17 +67,9 @@ jobs:
           echo "::set-env name=REPOSITORY_URI:$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
           echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
       
-      - name: Check semver stuff
-        run: |
-          echo release tag - ${{ steps.semantic_release_info.outputs.git_tag }}
-
-      # --------------------- 
-      # Run Migrations and DB Setup
-      # ---------------------
-
-      # This fails due to no access to RDS :( 
-      # - name: Run migrations
-      #   run: sh pre_start.sh
+      # - name: Check semver stuff
+      #   run: |
+      #     echo release tag - ${{ steps.semantic_release_info.outputs.git_tag }}
 
 
       # --------------------- 
@@ -123,5 +96,5 @@ jobs:
         with:
           task-definition: ${{ steps.task-def.outputs.task-definition }}
           service: sites-develop-service
-          cluster: sites-liveview
-          wait-for-service-stability: true
+          cluster: sites-2
+          # wait-for-service-stability: true

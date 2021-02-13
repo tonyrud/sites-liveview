@@ -22,6 +22,7 @@ hostname = System.fetch_env!("POSTGRES_HOST")
 # Required for application, but not migrations
 secret_key_base = System.fetch_env!("SECRET_KEY_BASE")
 host = System.fetch_env!("HOST")
+port = String.to_integer(System.get_env("PORT") || "4000")
 
 config :demo, Demo.Repo,
   # ssl: true,
@@ -36,7 +37,7 @@ config :demo, Demo.Repo,
 config :demo, DemoWeb.Endpoint,
   url: [host: host],
   http: [
-    port: String.to_integer(System.get_env("PORT") || "4000"),
+    port: port,
     transport_options: [socket_opts: [:inet6]]
   ],
   secret_key_base: secret_key_base
