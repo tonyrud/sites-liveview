@@ -33,8 +33,8 @@ variable "ecr_image_api" {
   default     = "326347646211.dkr.ecr.us-east-1.amazonaws.com/sites:latest"
 }
 
-variable "django_secret_key" {
-  description = "Secret key for Django app"
+variable "secret_key_base" {
+  description = "Secret key for Phoenix app"
 }
 
 
