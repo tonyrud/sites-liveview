@@ -24,3 +24,7 @@ variable "db_password" {
   description = "Password for RDS Instance"
 }
 
+variable "bastion_key_name" {
+  default = "sites-devops-bastion"
+}
+
