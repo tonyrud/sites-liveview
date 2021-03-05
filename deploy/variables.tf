@@ -28,3 +28,13 @@ variable "bastion_key_name" {
   default = "sites-devops-bastion"
 }
 
+variable "ecr_image_api" {
+  description = "ECR Image for API"
+  default     = "326347646211.dkr.ecr.us-east-1.amazonaws.com/sites:latest"
+}
+
+variable "django_secret_key" {
+  description = "Secret key for Django app"
+}
+
+
