@@ -14,3 +14,13 @@ variable "contact" {
   default = "tonrudny@gmail.com"
 }
 
+variable "db_username" {
+  type        = string
+  description = "Username for RDS Instance"
+}
+
+variable "db_password" {
+  type        = string
+  description = "Password for RDS Instance"
+}
+
