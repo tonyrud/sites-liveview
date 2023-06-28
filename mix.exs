@@ -42,7 +42,7 @@ defmodule Demo.MixProject do
       {:credo, "~> 1.5", only: [:dev, :test], runtime: false},
       {:csv, "~> 2.4"},
       {:dialyxir, "~> 1.0", only: [:dev, :test], runtime: false},
-      {:ecto_sql, "~> 3.4"},
+      {:ecto_sql, "~> 3.6"},
       {:ex_doc, "~> 0.22.0", only: :dev, runtime: false},
       {:faker, "~> 0.13", only: [:dev, :test]},
       {:floki, ">= 0.27.0", only: :test},
@@ -50,16 +50,14 @@ defmodule Demo.MixProject do
       {:gettext, "~> 0.11"},
       {:jason, "~> 1.0"},
       {:observer_cli, "~> 1.5"},
-      {:phoenix, "~> 1.5.6"},
-      {:phoenix_ecto, "~> 4.1"},
-      {:phoenix_html, "~> 2.11"},
-      {:phoenix_live_dashboard, "~> 0.3 or ~> 0.2.9"},
+      {:phoenix_html, "~> 3.0"},
+      {:phoenix_live_view, "~> 0.16.4"},
+      {:phoenix_live_dashboard, "~> 0.5"},
+      {:telemetry_metrics, "~> 0.6"},
+      {:telemetry_poller, "~> 0.5"},
       {:phoenix_live_reload, "~> 1.2", only: :dev},
-      {:phoenix_live_view, "~> 0.14.6"},
       {:plug_cowboy, "~> 2.0"},
-      {:postgrex, ">= 0.0.0"},
-      {:telemetry_metrics, "~> 0.4"},
-      {:telemetry_poller, "~> 0.4"}
+      {:postgrex, ">= 0.0.0"}
     ]
   end
 
