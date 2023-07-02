@@ -3,11 +3,9 @@ defmodule Demo.ZipCodes do
   `Demo.ZipCodes.ZipCode` context module
   """
 
-  alias Demo.{
-    Repo,
-    Sites.Site,
-    ZipCodes.ZipCode
-  }
+  alias Demo.Repo
+  alias Demo.Sites.Site
+  alias Demo.ZipCodes.ZipCode
 
   @type sites_or_error :: {:ok, [Site]} | {:error, Exception.t()}
 
@@ -97,7 +95,7 @@ defmodule Demo.ZipCodes do
     end
   end
 
-  @spec load_site(list(), list()) :: %Site{}
+  @spec load_site(list(), list()) :: Site.t()
   defp load_site(row, columns) do
     # convert the decimal selection from query above into float
     # row_with_float = List.update_at(row, 3, &Decimal.to_float(&1))

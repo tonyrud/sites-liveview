@@ -3,6 +3,10 @@ defmodule Demo.Release do
   Release tasks for migrations and seeds.
   """
 
+  # credo:disable-for-this-file
+
+  alias Ecto.Migrator
+
   require Logger
 
   @app :demo
@@ -36,13 +40,13 @@ defmodule Demo.Release do
     IO.puts("Running migrations")
 
     for repo <- repos() do
-      {:ok, _, _} = Ecto.Migrator.with_repo(repo, &Ecto.Migrator.run(&1, :up, all: true))
+      {:ok, _, _} = Migrator.with_repo(repo, &Migrator.run(&1, :up, all: true))
     end
   end
 
   def rollback(repo, version) do
     load_app()
-    {:ok, _, _} = Ecto.Migrator.with_repo(repo, &Ecto.Migrator.run(&1, :down, to: version))
+    {:ok, _, _} = Migrator.with_repo(repo, &Migrator.run(&1, :down, to: version))
   end
 
   @doc """
@@ -51,7 +55,7 @@ defmodule Demo.Release do
   def seed(repo, filename) do
     load_app()
 
-    case Ecto.Migrator.with_repo(repo, &eval_seed(&1, filename)) do
+    case Migrator.with_repo(repo, &eval_seed(&1, filename)) do
       {:ok, {:ok, _fun_return}, _apps} ->
         :ok
 

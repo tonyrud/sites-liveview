@@ -5,10 +5,8 @@ defmodule DemoWeb.SitesCreateLive do
 
   use DemoWeb, :live_view
 
-  alias Demo.{
-    Sites,
-    Sites.Site
-  }
+  alias Demo.Sites
+  alias Demo.Sites.Site
 
   @impl true
   def mount(_params, _session, socket) do

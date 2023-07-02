@@ -24,8 +24,8 @@ defmodule DemoWeb.SitesLive do
   # Handle route path changes.
   @impl true
   def handle_params(params, _url, socket) do
-    sort_by = (params["sort_by"] || "id") |> String.to_atom()
-    sort_order = (params["sort_order"] || "asc") |> String.to_atom()
+    sort_by = String.to_atom(params["sort_by"] || "id")
+    sort_order = String.to_atom(params["sort_order"] || "asc")
 
     sort_options = %{sort_by: sort_by, sort_order: sort_order}
 

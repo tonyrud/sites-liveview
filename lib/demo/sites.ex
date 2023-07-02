@@ -6,10 +6,8 @@ defmodule Demo.Sites do
 
   @sites_subscription_channel inspect(__MODULE__)
 
-  alias Demo.{
-    Repo,
-    Sites.Site
-  }
+  alias Demo.Repo
+  alias Demo.Sites.Site
 
   @base_list_query from(s in Site,
                      left_join: c in assoc(s, :controllers),
@@ -22,7 +20,7 @@ defmodule Demo.Sites do
   @doc """
   Create a new `Demo.Sites.Site`.
   """
-  @spec create_site(map()) :: {:ok, Site} | {:error, %Ecto.Changeset{}}
+  @spec create_site(map()) :: {:ok, Site.t()} | {:error, Ecto.Changeset.t()}
   def create_site(attributes) do
     %Site{}
     |> Site.create_changeset(attributes)

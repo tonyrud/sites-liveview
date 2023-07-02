@@ -23,7 +23,7 @@ Note: must be in this directory to run `docker-compose` commands
 postgres instance
 
 ```bash
-docker-compose exec db bash -c "psql --host=localhost --user=postgres"
+PGPASSWORD=postgres psql -U postgres -h localhost -p 54322 -d sites_dev 
 ```
 
 iex

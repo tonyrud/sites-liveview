@@ -1,11 +1,9 @@
 defmodule Demo.Test.Fixtures do
   @moduledoc false
 
-  alias Demo.{
-    Controllers.Controller,
-    Repo,
-    Sites.Site
-  }
+  alias Demo.Controllers.Controller
+  alias Demo.Repo
+  alias Demo.Sites.Site
 
   def make_many(count, schema, data \\ %{}), do: for(_ <- 1..count, do: make(schema, data))
 
