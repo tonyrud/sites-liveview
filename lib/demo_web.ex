@@ -44,8 +44,10 @@ defmodule DemoWeb do
 
   def live_view do
     quote do
+      import Phoenix.Component
+
       use Phoenix.LiveView,
-        layout: {DemoWeb.LayoutView, "live.html"}
+        layout: {DemoWeb.LayoutView, :live}
 
       unquote(view_helpers())
     end
@@ -81,9 +83,7 @@ defmodule DemoWeb do
       # Use all HTML functionality (forms, tags, etc)
       use Phoenix.HTML
 
-      # Import LiveView helpers (live_render, live_component, live_patch, etc)
-      import Phoenix.LiveView.Helpers
-
+      import Phoenix.Component
       # Import basic rendering functionality (render, render_layout, etc)
       import Phoenix.View
 
