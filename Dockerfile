@@ -22,8 +22,8 @@ COPY mix.lock .
 RUN mix deps.get
 
 # JS Dependencies
-COPY /assets/package*.json ./assets/
-RUN npm install --prefix assets && npm cache clean --force
+# COPY /assets/package*.json ./assets/
+# RUN npm install --prefix assets && npm cache clean --force
 
 COPY . .
 
