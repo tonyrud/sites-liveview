@@ -1,4 +1,4 @@
-FROM elixir:1.11.3-alpine
+FROM elixir:1.13.4-otp-25-alpine
 
 ENV MIX_ENV=dev
 
@@ -15,14 +15,15 @@ RUN apk update && \
 
 WORKDIR /app
 
-# JS Dependencies
-COPY /assets/package*.json ./assets/
-RUN npm install --prefix assets && npm cache clean --force
 
 # Elixir Dependencies
 COPY mix.exs .
 COPY mix.lock .
 RUN mix deps.get
+
+# JS Dependencies
+# COPY /assets/package*.json ./assets/
+# RUN npm install --prefix assets && npm cache clean --force
 
 COPY . .
 

@@ -86,7 +86,7 @@ defmodule Demo.Sites.Site do
   end
 
   # Adds an error to changeset if the value is not in the high/low range.
-  @spec check_range(%Ecto.Changeset{}, float(), atom(), map()) :: %Ecto.Changeset{}
+  @spec check_range(Ecto.Changeset.t(), float(), atom(), map()) :: Ecto.Changeset.t()
   defp check_range(changeset, val, key, %{high: h, low: l}) when val > h or val < l do
     add_error(
       changeset,

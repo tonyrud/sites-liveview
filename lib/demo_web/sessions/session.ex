@@ -15,10 +15,8 @@ defmodule Demo.Sessions.Session do
 
   alias __MODULE__
 
-  alias Demo.{
-    Sessions.Supervisor,
-    Users
-  }
+  alias Demo.Sessions.Supervisor
+  alias Demo.Users
 
   @fetch_session_timeout 60_000
 

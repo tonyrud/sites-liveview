@@ -18,6 +18,7 @@ services:
     depends_on:
       db:
         condition: service_healthy
+
   db:
     image: postgis/postgis:10-2.5-alpine
     environment:

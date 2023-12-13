@@ -4,10 +4,8 @@ defmodule DemoWeb.GeoLocationsLive do
   """
   use DemoWeb, :live_view
 
-  alias Demo.{
-    Sites,
-    ZipCodes
-  }
+  alias Demo.Sites
+  alias Demo.ZipCodes
 
   @impl true
   def mount(_params, _session, socket) do
@@ -67,7 +65,8 @@ defmodule DemoWeb.GeoLocationsLive do
     form_deleted_keys =
       if Map.get(new_params, "search_type") === "site" do
         site_id =
-          new_params["site_id"] || Enum.at(socket.assigns.options.site_ids, 0) |> Map.get(:value)
+          new_params["site_id"] ||
+            socket.assigns.options.site_ids |> Enum.at(0) |> Map.get(:value)
 
         new_params
         |> Map.delete("zip_code")
@@ -88,7 +87,7 @@ defmodule DemoWeb.GeoLocationsLive do
       form_deleted_keys
       |> Map.to_list()
       # remove nil values
-      |> Enum.filter(fn {_, v} -> !is_nil(v) end)
+      |> Enum.reject(fn {_, v} -> is_nil(v) end)
       # remove empty string values
       |> Enum.filter(fn {_, v} -> is_binary(v) && String.length(v) !== 0 end)
 
@@ -115,8 +114,9 @@ defmodule DemoWeb.GeoLocationsLive do
   end
 
   defp zipcode_options do
-    ZipCodes.list_zip_codes()
-    |> Enum.map(fn zip ->
+    zip_codes = ZipCodes.list_zip_codes()
+
+    Enum.map(zip_codes, fn zip ->
       %{value: zip.zip_code, name: "#{zip.zip_code} - #{zip.city}"}
     end)
   end

@@ -5,7 +5,7 @@
 # is restricted to this project.
 
 # General application configuration
-use Mix.Config
+import Config
 
 config :demo,
   ecto_repos: [Demo.Repo]
@@ -17,6 +17,14 @@ config :demo, DemoWeb.Endpoint,
   render_errors: [view: DemoWeb.ErrorView, accepts: ~w(html json), layout: false],
   pubsub_server: Demo.PubSub,
   live_view: [signing_salt: "z5nzOROZ"]
+
+config :esbuild,
+  version: "0.12.18",
+  default: [
+    args: ~w(js/app.js --bundle --target=es2016 --outdir=../priv/static/assets),
+    cd: Path.expand("../assets", __DIR__),
+    env: %{"NODE_PATH" => Path.expand("../deps", __DIR__)}
+  ]
 
 # Configures Elixir's Logger
 config :logger, :console,

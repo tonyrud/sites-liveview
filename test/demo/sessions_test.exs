@@ -1,10 +1,8 @@
 defmodule Demo.SessionsTest do
   use ExUnit.Case, async: false
 
-  alias Demo.Sessions.{
-    Session,
-    Supervisor
-  }
+  alias Demo.Sessions.Session
+  alias Demo.Sessions.Supervisor
 
   setup do
     start_supervised!({Supervisor, %{name: :test}})

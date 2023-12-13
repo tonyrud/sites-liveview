@@ -7,16 +7,20 @@ defmodule Demo.MixProject do
       version: "0.1.0",
       elixir: "~> 1.7",
       elixirc_paths: elixirc_paths(Mix.env()),
-      compilers: [:phoenix, :gettext] ++ Mix.compilers(),
+      compilers: Mix.compilers(),
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
       deps: deps(),
       dialyzer: dialyzer(),
+      xref: [exclude: [Phoenix.Ecto.CheckRepoStatus]],
 
       # Docs
       name: "Demo Sites",
       source_url: "https://github.com/tonyrud/sites-liveview",
-      homepage_url: "http://YOUR_PROJECT_HOMEPAGE"
+      homepage_url: "http://YOUR_PROJECT_HOMEPAGE",
+      preferred_cli_env: [
+        ci: :test
+      ]
     ]
   end
 
@@ -42,7 +46,8 @@ defmodule Demo.MixProject do
       {:credo, "~> 1.5", only: [:dev, :test], runtime: false},
       {:csv, "~> 2.4"},
       {:dialyxir, "~> 1.0", only: [:dev, :test], runtime: false},
-      {:ecto_sql, "~> 3.4"},
+      {:ecto_sql, "~> 3.6"},
+      {:esbuild, "~> 0.2", runtime: Mix.env() == :dev},
       {:ex_doc, "~> 0.22.0", only: :dev, runtime: false},
       {:faker, "~> 0.13", only: [:dev, :test]},
       {:floki, ">= 0.27.0", only: :test},
@@ -50,16 +55,17 @@ defmodule Demo.MixProject do
       {:gettext, "~> 0.11"},
       {:jason, "~> 1.0"},
       {:observer_cli, "~> 1.5"},
-      {:phoenix, "~> 1.5.6"},
-      {:phoenix_ecto, "~> 4.1"},
-      {:phoenix_html, "~> 2.11"},
-      {:phoenix_live_dashboard, "~> 0.3 or ~> 0.2.9"},
+      {:phoenix, "~> 1.7.0"},
+      {:phoenix_ecto, "~> 4.4"},
+      {:phoenix_html, "~> 3.0"},
+      {:phoenix_live_view, "~> 0.18.18"},
+      {:phoenix_live_dashboard, "~> 0.7.2"},
       {:phoenix_live_reload, "~> 1.2", only: :dev},
-      {:phoenix_live_view, "~> 0.14.6"},
+      {:phoenix_view, "~> 2.0"},
+      {:telemetry_metrics, "~> 0.6"},
+      {:telemetry_poller, "~> 0.5"},
       {:plug_cowboy, "~> 2.0"},
-      {:postgrex, ">= 0.0.0"},
-      {:telemetry_metrics, "~> 0.4"},
-      {:telemetry_poller, "~> 0.4"}
+      {:postgrex, ">= 0.0.0"}
     ]
   end
 
@@ -82,7 +88,8 @@ defmodule Demo.MixProject do
         "compile --warnings-as-errors",
         "format --check-formatted",
         "credo"
-      ]
+      ],
+      "assets.deploy": ["esbuild default --minify", "phx.digest"]
     ]
   end
 

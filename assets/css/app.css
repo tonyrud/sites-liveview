@@ -1,6 +1,5 @@
 /* This file is for your main application css. */
 @import './phoenix.css';
-// @import './forms.scss';
 @import '../node_modules/nprogress/nprogress.css';
 
 h1 {
@@ -119,7 +118,7 @@ a.active {
   display: block;
 }
 
-// modal styles
+ /* modal styles */
 .overlay {
   position: fixed;
   top: 0;
