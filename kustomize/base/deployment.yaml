@@ -1,0 +1,24 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sites-deployment
+  namespace: default
+  labels:
+    app: sites-liveview
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sites-liveview
+  template:
+    metadata:
+      labels:
+        app: sites-liveview
+    spec:
+      containers:
+      - name: sites
+        image: sites
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 4000
