@@ -20,5 +20,8 @@ spec:
       - name: sites
         image: sites
         imagePullPolicy: IfNotPresent
+        envFrom:
+            - configMapRef:
+                name: sites-app-config
         ports:
         - containerPort: 4000

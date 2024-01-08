@@ -22,7 +22,7 @@ Ecto.Migrator.with_repo(Repo, fn _repo ->
         address: item["Address"],
         billing_status: item["Billing Status"] |> String.downcase() |> String.to_atom(),
         has_weather_station: has_weather_station,
-        lng_lat_point: %Geo.Point{coordinates: {item["Long"], item["Lat"]}, srid: 4326}
+        lng_lat_point: %Geo.Point{coordinates: {item["Long"] |> String.to_float(), item["Lat"] |> String.to_float()}, srid: 4326}
       }
 
       Repo.insert(site)
@@ -62,7 +62,7 @@ Ecto.Migrator.with_repo(Repo, fn _repo ->
         zip_code: zip,
         city: city,
         state: state,
-        lng_lat_point: %Geo.Point{coordinates: {long, lat}, srid: 4326}
+        lng_lat_point: %Geo.Point{coordinates: {long |> String.to_float(), lat |> String.to_float()}, srid: 4326}
       }
 
       changeset = ZipCode.create_changeset(%ZipCode{}, attrs)

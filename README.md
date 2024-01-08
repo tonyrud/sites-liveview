@@ -8,9 +8,17 @@ Using
 - PostGIS for point to point location searching
 - Dockerized local development
 - GH Actions for CI on PRs
-- Dockerized releases and deployed via ECS
+- Local Kubernetes
 
 ## Start application
+
+Kubernetes
+
+```bash
+kubectl apply -k kustomize/dev 
+```
+
+Docker Compose
 
 ```bash
 docker-compose up --build

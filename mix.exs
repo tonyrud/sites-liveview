@@ -78,11 +78,12 @@ defmodule Demo.MixProject do
   defp aliases do
     [
       ci: ["lint", "test", "dialyzer"],
-      setup: ["deps.get", "ecto.setup", "cmd npm install --prefix assets"],
+      setup: ["deps.get", "ecto.setup"],
       "ecto.setup": ["ecto.create", "ecto.migrate"],
-      "ecto.setup.dev": ["ecto.setup", "run priv/repo/seeds/seeds.exs"],
+      "ecto.setup.dev": ["ecto.setup", "ecto.seed"],
       "ecto.reset": ["ecto.drop", "ecto.setup"],
       "ecto.reset.dev": ["ecto.drop", "ecto.setup.dev"],
+      "ecto.seed": ["run priv/repo/seeds/seeds.exs"],
       test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"],
       lint: [
         "compile --warnings-as-errors",
