@@ -9,7 +9,8 @@ spec:
   template:
     spec:
       containers:
-        - image: docker.io/postgres:14
+        - image: postgis/postgis:14-3.4-alpine
+        # - image: postgis/postgis:10-2.5-alpine
           name: postgresql
           envFrom:
             - secretRef:

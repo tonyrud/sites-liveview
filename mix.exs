@@ -79,10 +79,8 @@ defmodule Demo.MixProject do
     [
       ci: ["lint", "test", "dialyzer"],
       setup: ["deps.get", "ecto.setup"],
-      "ecto.setup": ["ecto.create", "ecto.migrate"],
-      "ecto.setup.dev": ["ecto.setup", "ecto.seed"],
-      "ecto.reset": ["ecto.drop", "ecto.setup"],
-      "ecto.reset.dev": ["ecto.drop", "ecto.setup.dev"],
+      "ecto.setup": ["ecto.create", "ecto.migrate"] ++ seed_db(Mix.env()),
+      "ecto.reset": ["ecto.drop --force-drop", "ecto.setup"],
       "ecto.seed": ["run priv/repo/seeds/seeds.exs"],
       test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"],
       lint: [
@@ -93,6 +91,9 @@ defmodule Demo.MixProject do
       "assets.deploy": ["esbuild default --minify", "phx.digest"]
     ]
   end
+
+  defp seed_db(:dev), do: ["ecto.seed"]
+  defp seed_db(_), do: []
 
   defp dialyzer do
     [

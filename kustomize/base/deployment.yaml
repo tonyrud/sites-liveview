@@ -2,19 +2,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: sites-deployment
+  name: sites
   namespace: default
   labels:
-    app: sites-liveview
+    app: sites
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: sites-liveview
+      app: sites
   template:
     metadata:
       labels:
-        app: sites-liveview
+        app: sites
     spec:
       containers:
       - name: sites
