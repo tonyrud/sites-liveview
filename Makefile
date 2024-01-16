@@ -13,7 +13,7 @@ delete:
 psql:
 	kubectl exec -it deploy/dev-postgresql -- psql -U postgres
 
-shell:
+iex:
 	kubectl exec -it deployments/dev-sites -- iex -S mix
 
 reset-db:

@@ -1,4 +1,4 @@
-FROM elixir:1.13.4-otp-25-alpine
+FROM elixir:1.14.5-otp-24-alpine
 
 ENV MIX_ENV=dev
 

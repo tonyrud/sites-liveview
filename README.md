@@ -15,13 +15,11 @@ Using
 Kubernetes
 
 ```bash
-kubectl apply -k kustomize/dev 
+make init
 ```
 
-Docker Compose
-
 ```bash
-docker-compose up --build
+make start
 ```
 
 ## Connect to Containers
@@ -31,13 +29,13 @@ Note: must be in this directory to run `docker-compose` commands
 postgres instance
 
 ```bash
-PGPASSWORD=postgres psql -U postgres -h localhost -p 54322 -d sites_dev 
+make psql
 ```
 
 iex
 
 ```bash
-docker-compose exec phoenix iex -S mix
+make iex
 
 # Get all sites query
 Demo.Sites.list_sites
