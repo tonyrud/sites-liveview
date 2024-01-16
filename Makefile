@@ -16,8 +16,9 @@ psql:
 shell:
 	kubectl exec -it deployments/dev-sites -- iex -S mix
 
-local-db-reset:
+reset-db:
 	kubectl exec -it deployments/dev-sites -- mix ecto.reset
 
-clean:
-	todo	
+reset:
+	make delete
+	make start
