@@ -8,11 +8,11 @@ import Config
 config :demo, :env, :test
 
 config :demo, Demo.Repo,
-  username: System.get_env("POSTGRES_USER", "postgres"),
-  password: System.get_env("POSTGRES_PASSWORD", "postgres"),
-  database: System.get_env("POSTGRES_DB", "sites_test"),
-  hostname: System.get_env("POSTGRES_HOST", "localhost"),
-  port: String.to_integer(System.get_env("POSTGRES_PORT", "5432")),
+  username: "postgres",
+  password: "postgres",
+  database: "sites_test",
+  hostname: "localhost",
+  port: "5432",
   pool: Ecto.Adapters.SQL.Sandbox,
   queue_target: 5000,
   pool_size: 50,

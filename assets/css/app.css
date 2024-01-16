@@ -1,6 +1,6 @@
 /* This file is for your main application css. */
 @import './phoenix.css';
-@import '../node_modules/nprogress/nprogress.css';
+/* @import '../node_modules/nprogress/nprogress.css'; */
 
 h1 {
   font-weight: bold;

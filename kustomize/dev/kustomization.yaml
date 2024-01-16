@@ -1,0 +1,14 @@
+---
+namespace: dev
+namePrefix: dev-
+
+configMapGenerator:
+  - name: sites-app-config
+    envs:
+      - app-config.properties
+
+generatorOptions:
+  disableNameSuffixHash: true
+
+resources:
+- ../base

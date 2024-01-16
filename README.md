@@ -8,12 +8,18 @@ Using
 - PostGIS for point to point location searching
 - Dockerized local development
 - GH Actions for CI on PRs
-- Dockerized releases and deployed via ECS
+- Local Kubernetes
 
 ## Start application
 
+Kubernetes
+
 ```bash
-docker-compose up --build
+make init
+```
+
+```bash
+make start
 ```
 
 ## Connect to Containers
@@ -23,13 +29,13 @@ Note: must be in this directory to run `docker-compose` commands
 postgres instance
 
 ```bash
-PGPASSWORD=postgres psql -U postgres -h localhost -p 54322 -d sites_dev 
+make psql
 ```
 
 iex
 
 ```bash
-docker-compose exec phoenix iex -S mix
+make iex
 
 # Get all sites query
 Demo.Sites.list_sites

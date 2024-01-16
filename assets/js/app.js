@@ -14,7 +14,7 @@ import '../css/app.css';
 //
 import 'phoenix_html';
 import { Socket } from 'phoenix';
-import NProgress from 'nprogress';
+// import NProgress from 'nprogress';
 import { LiveSocket } from 'phoenix_live_view';
 
 let csrfToken = document
@@ -24,9 +24,9 @@ let liveSocket = new LiveSocket('/live', Socket, {
   params: { _csrf_token: csrfToken },
 });
 
-// Show progress bar on live navigation and form submits
-window.addEventListener('phx:page-loading-start', (info) => NProgress.start());
-window.addEventListener('phx:page-loading-stop', (info) => NProgress.done());
+// // Show progress bar on live navigation and form submits
+// window.addEventListener('phx:page-loading-start', (info) => NProgress.start());
+// window.addEventListener('phx:page-loading-stop', (info) => NProgress.done());
 
 // connect if there are any LiveViews on the page
 liveSocket.connect();

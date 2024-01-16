@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgresql
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    spec:
+      containers:
+        - image: postgis/postgis:14-3.4-alpine
+        # - image: postgis/postgis:10-2.5-alpine
+          name: postgresql
+          envFrom:
+            - secretRef:
+                name: postgres-env
+          env:
+            - name: PGDATA
+              value: /data
+          ports:
+            - containerPort: 5432
+              name: postgresql
+          volumeMounts:
+            - name: postgres-data
+              mountPath: /data
+      volumes:
+        - name: postgres-data
+          persistentVolumeClaim:
+            claimName: postgres-pvc
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: sites-db
+  labels:
+    app: sites-db
+spec:
+  ports:
+    - port: 5432
+      nodePort: 30001
+  selector:
+    app: postgres
+  type: NodePort
