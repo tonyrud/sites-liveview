@@ -4,6 +4,16 @@ defmodule Demo.Controllers.Controller do
   """
   use Ecto.Schema
 
+  @type t :: %__MODULE__{
+          __meta__: Ecto.Schema.Metadata.t(),
+          id: integer(),
+          mode: String.t(),
+          name: String.t(),
+          site: Demo.Sites.Site.t(),
+          site_id: integer(),
+          type: String.t()
+        }
+
   schema "controllers" do
     field :name, :string
     field :mode, :string
