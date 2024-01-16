@@ -6,6 +6,21 @@ defmodule Demo.Sites.Site do
 
   import Ecto.Changeset
 
+  @type t :: %__MODULE__{
+          __meta__: Ecto.Schema.Metadata.t(),
+          address: String.t(),
+          billing_status: atom(),
+          controllers: [Demo.Controllers.Controller.t()],
+          controllers_count: integer(),
+          distance_in_miles: float(),
+          has_weather_station: boolean(),
+          id: integer(),
+          inserted_at: DateTime.t(),
+          lng_lat_point: Geo.PostGIS.Geometry.t(),
+          name: String.t(),
+          updated_at: DateTime.t()
+        }
+
   @required_fields ~w(
     address
     name

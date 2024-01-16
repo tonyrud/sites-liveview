@@ -10,8 +10,8 @@ on:
 
 env:
   MIX_ENV: test
-  ELIXIR_VERSION: '1.11'
-  OTP_VERSION: '22.2.8'
+  ELIXIR_VERSION: '1.14.3'
+  OTP_VERSION: '25.0.4'
 
 jobs:
   build:
@@ -27,7 +27,6 @@ jobs:
 
       - uses: erlef/setup-beam@v1
         with:
-          experimental-otp: true
           elixir-version: ${{ env.ELIXIR_VERSION }}
           otp-version: ${{ env.OTP_VERSION }}
 
@@ -64,7 +63,6 @@ jobs:
 
       - uses: erlef/setup-beam@v1
         with:
-          experimental-otp: true
           elixir-version: ${{ env.ELIXIR_VERSION }}
           otp-version: ${{ env.OTP_VERSION }}
 
@@ -114,7 +112,6 @@ jobs:
 
       - uses: erlef/setup-beam@v1
         with:
-          experimental-otp: true
           elixir-version: ${{ env.ELIXIR_VERSION }}
           otp-version: ${{ env.OTP_VERSION }}
 
