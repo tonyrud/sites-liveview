@@ -12,4 +12,3 @@ generatorOptions:
 
 resources:
 - ../base
-- services.yaml

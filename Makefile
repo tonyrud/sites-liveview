@@ -1,6 +1,9 @@
 build:
 	docker build . -t sites
 
+init:
+	kubectl create ns dev
+
 start:
 	kubectl apply -k kustomize/dev
 
