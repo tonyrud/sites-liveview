@@ -1,5 +1,5 @@
 build:
-	docker build . -t sites
+	docker build -f Dockerfile.multi . --build-arg MIX_ENV=dev --target dev -t sites-new
 
 init:
 	kubectl create ns dev
