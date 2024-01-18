@@ -21,8 +21,9 @@ defmodule DemoWeb do
     quote do
       use Phoenix.Controller, namespace: DemoWeb
 
-      import Plug.Conn
       import DemoWeb.Gettext
+      import Plug.Conn
+
       alias DemoWeb.Router.Helpers, as: Routes
     end
   end
@@ -44,10 +45,9 @@ defmodule DemoWeb do
 
   def live_view do
     quote do
-      import Phoenix.Component
+      use Phoenix.LiveView, layout: {DemoWeb.LayoutView, :live}
 
-      use Phoenix.LiveView,
-        layout: {DemoWeb.LayoutView, :live}
+      import Phoenix.Component
 
       unquote(view_helpers())
     end
@@ -65,15 +65,16 @@ defmodule DemoWeb do
     quote do
       use Phoenix.Router
 
-      import Plug.Conn
       import Phoenix.Controller
       import Phoenix.LiveView.Router
+      import Plug.Conn
     end
   end
 
   def channel do
     quote do
       use Phoenix.Channel
+
       import DemoWeb.Gettext
     end
   end
@@ -83,13 +84,14 @@ defmodule DemoWeb do
       # Use all HTML functionality (forms, tags, etc)
       use Phoenix.HTML
 
-      import Phoenix.Component
       # Import basic rendering functionality (render, render_layout, etc)
-      import Phoenix.View
-
       import DemoWeb.ErrorHelpers
       import DemoWeb.Gettext
+      import Phoenix.Component
+      import Phoenix.View
+
       alias DemoWeb.Router.Helpers, as: Routes
+
       unquote(html_helpers())
     end
   end
@@ -110,10 +112,10 @@ defmodule DemoWeb do
 
   defp html_helpers do
     quote do
+      import DemoWeb.Gettext
       # HTML escaping functionality
       import Phoenix.HTML
       # Core UI components and translation
-      import DemoWeb.Gettext
 
       # Shortcut for generating JS commands
       alias Phoenix.LiveView.JS

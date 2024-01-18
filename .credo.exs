@@ -40,7 +40,7 @@ exclude_test_files = %{included: ["**/*.ex", "**/*.exs"], excluded: [~r"/test/"]
       #
       # To modify the timeout for parsing files, change this value:
       #
-      parse_timeout: 10000,
+      parse_timeout: 10_000,
       #
       # If you want to use uncolored output by default, you can change `color`
       # to `false` below:
@@ -125,8 +125,7 @@ exclude_test_files = %{included: ["**/*.ex", "**/*.exs"], excluded: [~r"/test/"]
         {Credo.Check.Refactor.NegatedConditionsInUnless, []},
         {Credo.Check.Refactor.NegatedConditionsWithElse, []},
         {Credo.Check.Refactor.Nesting, []},
-        {Credo.Check.Refactor.PipeChainStart,
-         excluded_functions: ["from"], files: exclude_test_files},
+        {Credo.Check.Refactor.PipeChainStart, excluded_functions: ["from"], files: exclude_test_files},
         {Credo.Check.Refactor.UnlessWithElse, []},
         {Credo.Check.Refactor.WithClauses, []},
 

@@ -54,7 +54,7 @@ defmodule Demo.SitesTest do
 
   describe "delete_site/1" do
     test "deletes correct %Site{}" do
-      site = make_many(3, :site) |> Enum.at(1)
+      site = 3 |> make_many(:site) |> Enum.at(1)
 
       {:ok, deleted_site} = Sites.delete_site(site.id)
 
@@ -71,7 +71,7 @@ defmodule Demo.SitesTest do
 
   describe "update_site/2" do
     test "updates correct %Site{}" do
-      site = make_many(3, :site) |> Enum.at(1)
+      site = 3 |> make_many(:site) |> Enum.at(1)
 
       point = %Geo.Point{coordinates: {50, -50}, srid: 4326}
 

@@ -11,12 +11,11 @@ defmodule Demo.Sessions.Session do
 
   use GenServer, restart: :transient
 
-  require Logger
-
   alias __MODULE__
-
   alias Demo.Sessions.Supervisor
   alias Demo.Users
+
+  require Logger
 
   @fetch_session_timeout 60_000
 
@@ -71,8 +70,7 @@ defmodule Demo.Sessions.Session do
     GenServer.call(process_name(token), :remove_session, @fetch_session_timeout)
   end
 
-  defp process_name(token),
-    do: {:via, Registry, {SessionRegistry, "sesh:#{token}"}}
+  defp process_name(token), do: {:via, Registry, {SessionRegistry, "sesh:#{token}"}}
 
   defp register_session(%{"token" => token} = user) do
     case GenServer.whereis(process_name(token)) do

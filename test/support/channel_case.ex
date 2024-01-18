@@ -19,9 +19,9 @@ defmodule DemoWeb.ChannelCase do
 
   using do
     quote do
+      import DemoWeb.ChannelCase
       # Import conveniences for testing with channels
       import Phoenix.ChannelTest
-      import DemoWeb.ChannelCase
 
       # The default endpoint for testing
       @endpoint DemoWeb.Endpoint

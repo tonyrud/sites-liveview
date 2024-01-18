@@ -4,10 +4,10 @@ defmodule Demo.Sites do
   """
   import Ecto.Query
 
-  @sites_subscription_channel inspect(__MODULE__)
-
   alias Demo.Repo
   alias Demo.Sites.Site
+
+  @sites_subscription_channel inspect(__MODULE__)
 
   @base_list_query from(s in Site,
                      left_join: c in assoc(s, :controllers),
