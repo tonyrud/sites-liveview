@@ -1,7 +1,7 @@
 build:
 	docker build -f Dockerfile.multi . --build-arg MIX_ENV=dev --target dev -t sites-new
 
-init:
+kube-init:
 	kubectl create ns dev
 
 start:

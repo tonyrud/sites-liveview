@@ -12,10 +12,10 @@ Using
 
 ## Start application
 
-Kubernetes
+With Kubernetes running in Docker Desktop
 
 ```bash
-make init
+make kube-init
 ```
 
 ```bash
