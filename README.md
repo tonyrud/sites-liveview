@@ -6,20 +6,25 @@ Using
 
 - PubSub for real-time updates
 - PostGIS for point to point location searching
-- Dockerized local development
 - GH Actions for CI on PRs
 - Local Kubernetes
 
-## Start application
-
-With Kubernetes running in Docker Desktop
+## Project Dependencies
 
 ```bash
-make kube-init
+make repo-init
+```
+
+Docker Desktop will need to be running
+
+## Start application
+
+```bash
+tilt up
 ```
 
 ```bash
-make start
+make db-create
 ```
 
 ## Connect to Containers

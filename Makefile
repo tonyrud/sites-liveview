@@ -1,6 +1,12 @@
 build:
 	docker build -f Dockerfile.multi . --build-arg MIX_ENV=dev --target dev -t sites-new
 
+repo-init:
+	brew update
+	brew install kubectl
+	brew install tilt
+	kubectl create ns dev
+
 kube-init:
 	kubectl create ns dev
 
@@ -16,7 +22,13 @@ psql:
 iex:
 	kubectl exec -it deployments/dev-sites -- iex -S mix
 
-reset-db:
+sh:
+	kubectl exec -it deployments/dev-sites -- sh
+
+db-create:
+	kubectl exec -it deployments/dev-sites -- mix ecto.setup
+
+db-reset:
 	kubectl exec -it deployments/dev-sites -- mix ecto.reset
 
 reset:

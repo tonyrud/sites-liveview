@@ -34,8 +34,6 @@ npm-debug.log
 # we ignore priv/static.
 /priv/static/
 
-.iex.exs
-
 .git/
 .github/
 .gitignore
