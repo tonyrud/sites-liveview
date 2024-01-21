@@ -62,9 +62,17 @@ mix test
 
 ## TODOs
 
+### CI/CD
+
+- [ ] Build and push images on PRs
+- [ ] Deploy in a remote K8S cluster
+- [ ] K8S secrets
+- [ ] ArgoCD for preview branches
+
+### Application
+
 - [ ] Module and function docs
 - [ ] Unit tests
 - [ ] Handle lists of flash messages when editing/creating
 - [ ] Modal as a LiveComponent
 - [ ] Uncheck boxes after editing
-- [ x ] Add ci: credo, dialyxer, formatting

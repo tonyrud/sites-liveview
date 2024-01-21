@@ -19,6 +19,7 @@ metadata:
   name: local-storage-pv
 spec:
   storageClassName: mylocalstorage
+  persistentVolumeReclaimPolicy: Recycle
   capacity:
     storage: 10Gi
   accessModes:
