@@ -15,7 +15,7 @@ defmodule DemoWeb.HomeLive do
   @impl true
   def render(assigns) do
     ~L"""
-    <h1>No content</h1>
+    <h1>TODO</h1>
     """
   end
 end

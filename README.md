@@ -6,20 +6,25 @@ Using
 
 - PubSub for real-time updates
 - PostGIS for point to point location searching
-- Dockerized local development
 - GH Actions for CI on PRs
 - Local Kubernetes
 
-## Start application
-
-Kubernetes
+## Project Dependencies
 
 ```bash
-make init
+make repo-init
+```
+
+Docker Desktop will need to be running
+
+## Start application
+
+```bash
+tilt up
 ```
 
 ```bash
-make start
+make db-create
 ```
 
 ## Connect to Containers
@@ -57,9 +62,17 @@ mix test
 
 ## TODOs
 
+### CI/CD
+
+- [ ] Build and push images on PRs
+- [ ] Deploy in a remote K8S cluster
+- [ ] K8S secrets
+- [ ] ArgoCD for preview branches
+
+### Application
+
 - [ ] Module and function docs
 - [ ] Unit tests
 - [ ] Handle lists of flash messages when editing/creating
 - [ ] Modal as a LiveComponent
 - [ ] Uncheck boxes after editing
-- [ x ] Add ci: credo, dialyxer, formatting
