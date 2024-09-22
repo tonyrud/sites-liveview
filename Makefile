@@ -17,7 +17,7 @@ delete:
 	kubectl delete -k kustomize/dev
 
 psql:
-	kubectl exec -it deploy/dev-postgresql -- psql -U postgres
+	kubectl exec -it deploy/dev-postgresql -- psql -U postgres -d sites_dev_pv
 
 iex:
 	kubectl exec -it deployments/dev-sites -- iex -S mix
